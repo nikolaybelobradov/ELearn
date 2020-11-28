@@ -5,5 +5,7 @@
         public const string SystemName = "ELearn";
 
         public const string AdministratorRoleName = "Administrator";
+        public const string LecturerRoleName = "Lecturer";
+        public const string StudentRoleName = "Student";
     }
 }
