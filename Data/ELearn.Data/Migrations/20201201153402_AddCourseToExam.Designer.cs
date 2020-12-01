@@ -4,14 +4,16 @@ using ELearn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ELearn.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201201153402_AddCourseToExam")]
+    partial class AddCourseToExam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,8 +242,9 @@ namespace ELearn.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ChoicesOrder")
-                        .HasColumnType("int");
+                    b.Property<string>("ChoicesOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CourseId")
                         .IsRequired()
@@ -274,8 +277,9 @@ namespace ELearn.Data.Migrations
                     b.Property<int>("QuestionsCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionsOrder")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionsOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

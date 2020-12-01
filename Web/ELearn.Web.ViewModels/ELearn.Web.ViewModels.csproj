@@ -20,11 +20,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\ELearn.Data.Models\ELearn.Data.Models.csproj" />
+    <ProjectReference Include="..\..\ELearn.Common\ELearn.Common.csproj" />
     <ProjectReference Include="..\..\Services\ELearn.Services.Mapping\ELearn.Services.Mapping.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Exams\" />
   </ItemGroup>
 
 </Project>

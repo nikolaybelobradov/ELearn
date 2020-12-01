@@ -13,6 +13,8 @@
 
         Task<int> GetAllCoursesCountAsync(string keyword = null);
 
+        Task<ICollection<T>> GetMyCoursesWithoutPagesAsync<T>(ApplicationUser currentUser);
+
         Task<IEnumerable<T>> GetMyCoursesAsync<T>(ApplicationUser currentUser, int page, int countPerPage, string keyword = null);
 
         Task<int> GetMyCoursesCountAsync(ApplicationUser currentUser, string keyword = null);

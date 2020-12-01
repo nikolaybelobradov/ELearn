@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using ELearn.Common.Enums;
     using ELearn.Data.Common.Models;
 
     public class Exam : BaseDeletableModel<string>
@@ -26,16 +27,22 @@
         public int QuestionsCount { get; set; }
 
         [Required]
-        public string QuestionsOrder { get; set; }
+        public OrderType QuestionsOrder { get; set; }
 
         [Required]
-        public string ChoicesOrder { get; set; }
+        public OrderType ChoicesOrder { get; set; }
 
         [Required]
         public string CreatorId { get; set; }
 
         [ForeignKey(nameof(CreatorId))]
         public virtual ApplicationUser Creator { get; set; }
+
+        [Required]
+        public string CourseId { get; set; }
+
+        [ForeignKey(nameof(CourseId))]
+        public virtual Course Course { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
     }

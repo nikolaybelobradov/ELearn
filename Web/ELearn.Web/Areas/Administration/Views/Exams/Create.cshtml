@@ -1,7 +1,72 @@
-﻿
+﻿@model CreateExamViewModel
+@using ELearn.Common.Enums
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create an exam";
 }
+<div class="container">
 
-<h1>Create</h1>
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <p>Please enter information about the exam you want to create.</p>
+                </div>
+                <div class="component">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="@Model.Name">Name</label>
+                            <input asp-for="@Model.Name" class="form-control" placeholder="Enter exam name">
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Description">Description</label>
+                            <textarea asp-for="@Model.Description" class="form-control" placeholder="Enter exam description"></textarea>
+                            <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.QuestionsCount">Questions Count</label>
+                            <input asp-for="@Model.QuestionsCount" class="form-control" placeholder="Enter questions count">
+                            <span asp-validation-for="@Model.QuestionsCount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.QuestionsOrder">Questions Order</label>
+                            <select asp-for="@Model.QuestionsOrder" asp-items="Html.GetEnumSelectList<OrderType>()" class="form-control">
+                                <option selected disabled="disabled">-- Select --</option>"
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ChoicesOrder">Choices Order</label>
+                            <select asp-for="@Model.ChoicesOrder" asp-items="Html.GetEnumSelectList<OrderType>()" class="form-control">
+                                <option selected disabled="disabled">-- Select --</option>"
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.CourseId">Course</label>
+                            <select asp-for="@Model.CourseId" class="form-control">
+                                <option selected disabled="disabled">-- Select --</option>"
+                                @foreach (var course in Model.UserCourses)
+                                {
+                                    <option value="@course.Id">@course.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <button type="reset" class="btn btn-primary col-md-5 mt-5">Clear</button>
+                            <div class="col-1 mr-4"></div>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Create</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 

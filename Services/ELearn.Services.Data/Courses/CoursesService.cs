@@ -125,5 +125,17 @@
 
             await this.courseRepository.SaveChangesAsync();
         }
+
+        public async Task<ICollection<T>> GetMyCoursesWithoutPagesAsync<T>(ApplicationUser currentUser)
+        {
+            var courses = await this.courseRepository
+                .All()
+                .Where(x => x.Users.Contains(currentUser))
+                .OrderByDescending(x => x.Name)
+                .To<T>()
+                .ToListAsync();
+
+            return courses;
+        }
     }
 }
