@@ -15,9 +15,24 @@ namespace ELearn.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("ApplicationUserCourse", b =>
+                {
+                    b.Property<string>("CoursesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CoursesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ApplicationUserCourse");
+                });
 
             modelBuilder.Entity("ELearn.Data.Models.ApplicationRole", b =>
                 {
@@ -41,12 +56,12 @@ namespace ELearn.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -54,7 +69,7 @@ namespace ELearn.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -79,14 +94,22 @@ namespace ELearn.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -94,16 +117,20 @@ namespace ELearn.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -121,22 +148,182 @@ namespace ELearn.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Choice", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTrue")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Choices");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Course", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Exam", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ChoicesOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuestionsCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QuestionsOrder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Exams");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Question", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExamId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("ELearn.Data.Models.Setting", b =>
@@ -144,7 +331,7 @@ namespace ELearn.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -176,7 +363,7 @@ namespace ELearn.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -200,7 +387,7 @@ namespace ELearn.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -275,6 +462,58 @@ namespace ELearn.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ApplicationUserCourse", b =>
+                {
+                    b.HasOne("ELearn.Data.Models.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ELearn.Data.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Choice", b =>
+                {
+                    b.HasOne("ELearn.Data.Models.Question", "Question")
+                        .WithMany("Choices")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Exam", b =>
+                {
+                    b.HasOne("ELearn.Data.Models.Course", null)
+                        .WithMany("Exams")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("ELearn.Data.Models.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Question", b =>
+                {
+                    b.HasOne("ELearn.Data.Models.Exam", "Exam")
+                        .WithMany("Questions")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("ELearn.Data.Models.ApplicationRole", null)
@@ -324,6 +563,30 @@ namespace ELearn.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Claims");
+
+                    b.Navigation("Logins");
+
+                    b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Course", b =>
+                {
+                    b.Navigation("Exams");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Exam", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("ELearn.Data.Models.Question", b =>
+                {
+                    b.Navigation("Choices");
                 });
 #pragma warning restore 612, 618
         }

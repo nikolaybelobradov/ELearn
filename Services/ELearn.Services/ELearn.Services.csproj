@@ -18,4 +18,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\ELearn.Data.Models\ELearn.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\ELearn.Web.ViewModels\ELearn.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\ELearn.Services.Mapping\ELearn.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>

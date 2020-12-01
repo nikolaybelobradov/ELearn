@@ -2,13 +2,18 @@
 {
     using System.Reflection;
 
+    using AutoMapper;
+
     using ELearn.Data;
     using ELearn.Data.Common;
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
     using ELearn.Data.Repositories;
     using ELearn.Data.Seeding;
+    using ELearn.Services;
     using ELearn.Services.Data;
+    using ELearn.Services.Data.Courses;
+    using ELearn.Services.Data.Users;
     using ELearn.Services.Mapping;
     using ELearn.Services.Messaging;
     using ELearn.Web.ViewModels;
@@ -61,7 +66,11 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            services.AddAutoMapper(typeof(ELearnProfile));
+
             // Application services
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<ICoursesService, CoursesService>();
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
         }
@@ -82,7 +91,6 @@
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

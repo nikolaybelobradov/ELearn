@@ -1,158 +1,72 @@
-﻿@using ELearn.Common
-<!--
-=========================================================
-Material Kit - v2.0.7
-=========================================================
-
-Product Page: https://www.creative-tim.com/product/material-kit
-Copyright 2020 Creative Tim (https://www.creative-tim.com/)
-
-Coded by Creative Tim
-
-=========================================================
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="~/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="~/img/favicon.png">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
 
-    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <!--     Fonts and icons     -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-    <!-- CSS Files -->
-    <link href="~/css/material-kit.css?v=2.0.7" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <link href="assets/img/favicon.ico" rel="icon" type="image/png">
+
+    <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/lazy.css">
+    <link rel="stylesheet" href="~/css/demo.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
 </head>
 
-<body class="index-page sidebar-collapse">
-    <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
-        <div class="container">
-            <div class="navbar-translate">
-                <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html">
-                    Material Kit
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="dropdown nav-item">
-                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <i class="material-icons">apps</i> Components
-                        </a>
-                        <div class="dropdown-menu dropdown-with-icons">
-                            <a href="./index.html" class="dropdown-item">
-                                <i class="material-icons">layers</i> All Components
-                            </a>
-                            <a href="https://demos.creative-tim.com/material-kit/docs/2.0/getting-started/introduction.html" class="dropdown-item">
-                                <i class="material-icons">content_paste</i> Documentation
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)" onclick="scrollToDownload()">
-                            <i class="material-icons">cloud_download</i> Download
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://www.creative-tim.com/product/material-kit-pro" target="_blank">
-                            <i class="material-icons">unarchive</i> Upgrade to PRO
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://twitter.com/CreativeTim" target="_blank" data-original-title="Follow us on Twitter" rel="nofollow">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank" data-original-title="Like us on Facebook" rel="nofollow">
-                            <i class="fa fa-facebook-square"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank" data-original-title="Follow us on Instagram" rel="nofollow">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>        
+<body class="index">
 
-            @this.RenderBody()
+    <partial name="_MainNavPartial" />
+    <partial name="_CookieConsentPartial" />
 
-    <footer class="footer" data-background-color="black">
+    @this.RenderBody()
+
+    <footer class="footer-1 bg-light text-dark">
         <div class="container">
-            <nav class="float-left">
-                <ul>
-                    <li>
-                        <a href="https://www.creative-tim.com/">
-                            Creative Tim
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.creative-tim.com/presentation">
-                            About Us
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.creative-tim.com/blog">
-                            Blog
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.creative-tim.com/license">
-                            Licenses
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="copyright float-right">
-                &copy;
-                <script>
-                    document.write(new Date().getFullYear())
-                </script>, made with <i class="material-icons">favorite</i> by
-                <a href="https://www.creative-tim.com/" target="_blank">Creative Tim</a> for a better web.
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="links">
+                    <ul class="footer-menu list-unstyled d-flex flex-row text-center text-md-left">
+                        <li><a href="https://bootstrapbay.com/" target="_blank">Store</a></li>
+                        <li><a href="https://bootstrapbay.com/about" target="_blank">About Us</a></li>
+                        <li><a href="https://bootstrapbay.com/blog/" target="_blank">Blog</a></li>
+                        <li><a href="https://bootstrapbay.com/terms" target="_blank">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="social mt-4 mt-md-0">
+                    <a class="twitter btn btn-outline-primary btn-icon" href="https://twitter.com/bootstrapbay" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                        <span class="sr-only">View our Twitter Profile</span>
+                    </a>
+                    <a class="facebook btn btn-outline-primary btn-icon" href="https://www.facebook.com/bootstrapbayofficial/" target="_blank">
+                        <i class="fab fa-facebook"></i>
+                        <span class="sr-only">
+                            View our Facebook Profile
+                            <span>
+                    </a>
+                    <a class="github btn btn-outline-primary btn-icon" href="https://github.com/bootstrapbay" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span class="sr-only">View our GitHub Profile</span>
+                    </a>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <hr />
+                <p class="small">&copy; 2019, made with <span class="text-danger"><i class="fas fa-heart"></i></span> by BootstrapBay</p>
             </div>
         </div>
     </footer>
 
-    <!--   Core JS Files   -->
-    <script src="~/js/core/jquery.min.js" type="text/javascript"></script>
-    <script src="~/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="~/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
-    <script src="~/js/plugins/moment.min.js"></script>
-    <script src="~/js/plugins/bootstrap-datetimepicker.js" type="text/javascript"></script>
-    <script src="~/js/plugins/nouislider.min.js" type="text/javascript"></script>
-    <script src="~/js/material-kit.js?v=2.0.7" type="text/javascript"></script>
-    <script>
-        $(document).ready(function () {
-            //init DateTimePickers
-            materialKit.initFormExtendedDatetimepickers();
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/popper/popper.min.js"></script>
+    <script src="~/vendor/bootstrap/bootstrap.min.js"></script>
 
-            // Sliders Init
-            materialKit.initSliders();
-        });
+    <!-- optional plugins -->
+    <script src="~/vendor/nouislider/js/nouislider.min.js"></script>
 
-
-        function scrollToDownload() {
-            if ($('.section-download').length != 0) {
-                $("html, body").animate({
-                    scrollTop: $('.section-download').offset().top
-                }, 1000);
-            }
-        }
-    </script>
+    <!--   lazy javascript -->
+    <script src="~/js/lazy.js"></script>
 
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>

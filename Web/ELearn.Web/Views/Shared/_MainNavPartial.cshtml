@@ -1,0 +1,70 @@
+﻿@using ELearn.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#lazy"><img src="~/img/logo.svg" alt="Example Navbar 1" class="mr-2" height="30">ELearn</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-5" aria-controls="navbarNavDropdown-5"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse mr-auto text-center" id="navbarNavDropdown-5">
+            <ul class="navbar-nav ml-auto">
+                @if (this.SignInManager.IsSignedIn(this.User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    var FullName = user.FirstName + " " + user.LastName;
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            My profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <span><b>@FullName</b></span>
+                            <a class="dropdown-item" href="#">Dashboard</a>
+                            <a class="dropdown-item" href="#">Users</a>
+                            <a class="dropdown-item" href="#">Marketing</a>
+                        </div>
+                    </li>
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.LecturerRoleName))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                Admin panel
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard">Dashboard</a>
+
+                                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)){
+                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Users" asp-action="All">Users</a>
+                                }                               
+                                
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="Index">Courses</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="All">Exams</a>
+                            </div>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">Logout</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

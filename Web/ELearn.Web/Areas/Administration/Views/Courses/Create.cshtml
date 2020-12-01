@@ -1,0 +1,57 @@
+﻿@model CreateCourseViewModel
+@{
+    ViewData["Title"] = "Create a course";
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+
+                <ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-4 col-12">
+                    <li class="nav-item">
+                        <a class="nav-link nav-to-change" asp-controller="Courses" asp-action="Index"><i class="fas fa-file"></i> All Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-to-change" asp-controller="Courses" asp-action="My"><i class="fas fa-user-circle"></i> My Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-to-change active" asp-controller="Courses" asp-action="Create"><i class="fas fa-plus-circle"></i> Create</a>
+                    </li>
+                </ul>
+
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <p>Please enter information about the course you want to create.</p>
+                </div>
+                <div class="component">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="@Model.Name">Name</label>
+                            <input asp-for="@Model.Name" class="form-control" placeholder="Enter course name">
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Description">Description</label>
+                            <textarea asp-for="@Model.Description" class="form-control" placeholder="Enter course description"></textarea>
+                            <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <button type="reset" class="btn btn-primary col-md-5 mt-5">Clear</button>
+                            <div class="col-1 mr-4"></div>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Create</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

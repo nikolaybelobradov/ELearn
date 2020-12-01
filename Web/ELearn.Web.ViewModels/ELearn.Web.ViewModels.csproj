@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Services\ELearn.Services.Mapping\ELearn.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exams\" />
+  </ItemGroup>
+
 </Project>

@@ -24,6 +24,14 @@
         {
         }
 
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Exam> Exams { get; set; }
+
+        public DbSet<Question> Questions { get; set; }
+
+        public DbSet<Choice> Choices { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
@@ -47,7 +55,6 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
             this.ConfigureUserIdentityRelations(builder);
