@@ -4,9 +4,12 @@
     using System.Threading.Tasks;
 
     using ELearn.Data.Models;
+    using ELearn.Web.ViewModels.Courses;
 
     public interface ICoursesService
     {
+        Task<CourseViewModel> GetCourseByIdAsync(string courseId);
+
         Task CreateCourseAsync<TModel>(TModel model);
 
         Task<IEnumerable<T>> GetAllCoursesAsync<T>(int page, int countPerPage, string keyword = null);

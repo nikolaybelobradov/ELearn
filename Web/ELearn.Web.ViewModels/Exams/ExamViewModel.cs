@@ -1,0 +1,34 @@
+﻿namespace ELearn.Web.ViewModels.Exams
+{
+    using System.Collections.Generic;
+
+    using ELearn.Common.Enums;
+    using ELearn.Data.Models;
+    using ELearn.Services.Mapping;
+
+    public class ExamViewModel : IMapFrom<Exam>
+    {
+        public ExamViewModel()
+        {
+            this.Questions = new HashSet<Question>();
+        }
+
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public int QuestionsCount { get; set; }
+
+        public OrderType QuestionsOrder { get; set; }
+
+        public OrderType ChoicesOrder { get; set; }
+
+        public string CourseId { get; set; }
+
+        public ApplicationUser Creator { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
+    }
+}

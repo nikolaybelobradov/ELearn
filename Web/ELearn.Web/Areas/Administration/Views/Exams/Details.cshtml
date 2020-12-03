@@ -1,0 +1,144 @@
+﻿@model ExamViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+    var i = 1;
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <a class="btn btn-warning btn-sm"
+                       asp-area="Administration"
+                       asp-controller="Courses"
+                       asp-action="Details"
+                       asp-route-id="@Model.CourseId">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                    <br /><br />
+
+                    <h2>
+                        @ViewData["Title"]
+                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id)
+                        {
+                            <a class="btn btn-warning btn-sm"
+                               asp-area="Administration"
+                               asp-controller="Questions"
+                               asp-action="Create"
+                               asp-route-id="@Model.Id">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        }
+                    </h2>
+                    <p>@Model.Description</p>
+
+                    <p><b>Course:</b> @ViewData["CourseName"]</p>
+                </div>
+
+                <ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-4 col-12">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#questions"><i class="fas fa-file"></i> Questions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#users"><i class="fas fa-user-circle"></i> Users</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="exams">
+                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id)
+                        {
+                            <a class="btn btn-success"
+                               asp-area="Administration"
+                               asp-controller="Questions"
+                               asp-action="Create"
+                               asp-route-id="@Model.Id">
+                                <i class="fas fa-plus"></i>
+                                Create
+                            </a>
+                            <br /><br />
+                        }
+                        <div class="input-group form-group flex-grow-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="search" flex-grow-1 mr-2" name="keyword" placeholder="Enter keyword...">
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">Text</th>
+                                    <th scope="col">Active</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var question in Model.Questions)
+                                {
+                                    <tr class="searchItem">
+                                        <td>@i</td>
+                                        <td>@question.Text</td>
+                                        @if (@question.IsActive == true)
+                                        {
+                                            <td><span class="badge badge-pill badge-success">Yes</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge badge-pill badge-danger">No</span></td>
+                                        }
+                                        <td>
+                                            <a class="btn btn-info"
+                                               asp-area="Administration"
+                                               asp-controller="Questions"
+                                               asp-action="Details"
+                                               asp-route-id="@question.Id">
+                                                <i class="fas fa-info"></i>
+                                            </a>
+                                            <a class="btn btn-warning"
+                                               asp-area="Administration"
+                                               asp-controller="Questions"
+                                               asp-action="Edit"
+                                               asp-route-id="@question.Id">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="users">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            function Contains(text_one, text_two) {
+                if (text_one.indexOf(text_two) != -1)
+                    return true;
+            }
+            $("#search").keyup(function () {
+                var searchText = $("#search").val().toLowerCase();
+                $(".searchItem").each(function () {
+                    if (!Contains($(this).text().toLowerCase(), searchText)) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -5,6 +5,9 @@
     using AutoMapper;
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
+    using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Exams;
+    using Microsoft.EntityFrameworkCore;
 
     public class ExamsService : IExamsService
     {
@@ -23,6 +26,15 @@
 
             await this.examRepository.AddAsync(exam);
             await this.examRepository.SaveChangesAsync();
+        }
+
+        public async Task<ExamViewModel> GetExamByIdAsync(string examId)
+        {
+            var exam = await this.examRepository.All()
+                .To<ExamViewModel>()
+                .FirstOrDefaultAsync(x => x.Id == examId);
+
+            return exam;
         }
     }
 }

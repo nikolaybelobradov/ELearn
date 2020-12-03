@@ -1,0 +1,65 @@
+﻿@model CreateQuestionViewModel
+@{
+    ViewData["Title"] = "Create a question";
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <a class="btn btn-warning btn-sm"
+                       asp-area="Administration"
+                       asp-controller="Exams"
+                       asp-action="Details"
+                       asp-route-id="@ViewData["ExamId"]">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                    <br /><br />
+
+                    <h2>@ViewData["Title"]</h2>
+                    <p>Please enter information about the question you want to create.</p>
+
+                    <p><b>Exam:</b> @ViewData["ExamName"]</p>
+                    <p><b>Course:</b> @ViewData["CourseName"]</p>
+                </div>
+                <div class="component">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="@Model.Text">Text</label>
+                            <input asp-for="@Model.Text" class="form-control" placeholder="Enter question text">
+                            <span asp-validation-for="@Model.Text" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.IsActive">Active</label>
+                            <select asp-for="@Model.IsActive" class="form-control">
+                                <option selected disabled="disabled">-- Select --</option>"
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="@Model.ExamId" value="@ViewData["ExamId"]" />
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <button type="reset" class="btn btn-primary col-md-5 mt-5">Clear</button>
+                            <div class="col-1 mr-4"></div>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<br/>
+<br/> 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

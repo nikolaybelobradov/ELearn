@@ -12,13 +12,13 @@
 
                 <ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-4 col-12">
                     <li class="nav-item">
-                        <a class="nav-link nav-to-change" asp-controller="Courses" asp-action="Index"><i class="fas fa-file"></i> All Courses</a>
+                        <a class="nav-link" asp-controller="Courses" asp-action="Index"><i class="fas fa-file"></i> All Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-to-change active" asp-controller="Courses" asp-action="My"><i class="fas fa-user-circle"></i> My Courses</a>
+                        <a class="nav-link active" asp-controller="Courses" asp-action="My"><i class="fas fa-user-circle"></i> My Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-to-change" asp-controller="Courses" asp-action="Create"><i class="fas fa-plus-circle"></i> Create</a>
+                        <a class="nav-link" asp-controller="Courses" asp-action="Create"><i class="fas fa-plus-circle"></i> Create</a>
                     </li>
                 </ul>
                 <div class="page-header">
@@ -50,8 +50,17 @@
                             </div>
                             <div class="card-footer">
                                 <center>
-                                    <a href="#a" class="btn btn-primary">View</a>
-                                    <a href="#a" class="btn btn-dark">Exit</a>
+                                    <a asp-area="Administration"
+                                       asp-controller="Courses"
+                                       asp-action="Details"
+                                       asp-route-id="@course.Id"
+                                       class="btn btn-primary">Details</a>
+
+                                    <a asp-area="Administration"
+                                       asp-controller="Courses"
+                                       asp-action="Exit"
+                                       asp-route-id="@course.Id"
+                                       class="btn btn-dark">Exit</a>
                                 </center>
                             </div>
                         </div>

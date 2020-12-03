@@ -8,6 +8,7 @@
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Courses;
     using Microsoft.EntityFrameworkCore;
 
     public class CoursesService : ICoursesService
@@ -136,6 +137,15 @@
                 .ToListAsync();
 
             return courses;
+        }
+
+        public async Task<CourseViewModel> GetCourseByIdAsync(string courseId)
+        {
+            var course = await this.courseRepository.All()
+                .To<CourseViewModel>()
+                .FirstOrDefaultAsync(x => x.Id == courseId);
+
+            return course;
         }
     }
 }

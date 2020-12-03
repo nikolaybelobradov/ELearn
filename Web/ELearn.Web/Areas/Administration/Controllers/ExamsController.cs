@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
 
     using ELearn.Data.Models;
     using ELearn.Services.Data.Courses;
@@ -8,8 +9,6 @@
     using ELearn.Web.ViewModels.Exams;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class ExamsController : AdministrationController
     {
@@ -52,6 +51,19 @@
             await this.examsService.CreateExamAsync(viewModel);
 
             return this.RedirectToAction("My");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var exam = await this.examsService.GetExamByIdAsync(id);
+            var course = await this.coursesService.GetCourseByIdAsync(exam.CourseId);
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            this.ViewData["CurrentUserId"] = currentUser.Id;
+            this.ViewData["CourseName"] = course.Name;
+
+            return this.View(exam);
         }
     }
 }

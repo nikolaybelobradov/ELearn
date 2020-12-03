@@ -1,0 +1,100 @@
+﻿@model CourseViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <p>@Model.Description</p>
+                </div>
+
+                <ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-4 col-12">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#exams"><i class="fas fa-file"></i> Exams</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#users"><i class="fas fa-user-circle"></i> Users</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="exams">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Questions Count</th>
+                                    <th scope="col">Questions Order</th>
+                                    <th scope="col">Choices Order</th>
+                                    <th scope="col">Creator</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var exam in Model.Exams)
+                            {
+                                <tr class="table-light searchItems">
+                                    <th scope="row">@exam.Name</th>
+                                    <td>@exam.QuestionsCount</td>
+                                    <td>@exam.QuestionsOrder</td>
+                                    <td>@exam.ChoicesOrder</td>
+                                    <td>@(exam.Creator.FirstName+" "
+                                            +exam.Creator.LastName)</td>
+                                    <td>
+                                        <a class="btn btn-primary"
+                                           asp-area="Administration"
+                                           asp-controller="Exams"
+                                           asp-action="Details"
+                                           asp-route-id="@exam.Id"
+                                           >
+                                            <i class="fas fa-plus"></i>
+                                            Details
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="users">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model.Users)
+                            {
+                                <tr class="table-light searchItems">
+                                    <th scope="row">@user.Email</th>
+                                    <td>@(user.FirstName+" "+user.MiddleName+" "+user.LastName)</td>
+                                    <td>
+                                        <a class="btn btn-primary"
+                                           asp-action="Delete" ,
+                                           asp-controller="Dashboard"
+                                           asp-area="Administration"
+                                           asp-route-id="@user.Id">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
