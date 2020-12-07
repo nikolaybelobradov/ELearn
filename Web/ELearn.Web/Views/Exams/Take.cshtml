@@ -1,0 +1,55 @@
+﻿@model ExamViewModel
+
+@{
+    ViewData["Title"] = "Take Quiz";
+}
+
+    <div class="container-fluid">
+        <div class="col-12 offset-md-2 col-md-8 my-3 row">
+            <form method="post" class="col-11 ml-4 mb-5">
+
+                @for (int i = 0; i < Model.Questions.Count; i++)
+                {
+                    <div class="component">
+                        <div class="card mb-3">
+                            <div class="card-header text-warning">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="text-primary ml-1">Question @(i+1)</span>
+                            </div>
+
+                            <div class="card-title text-center m-1">
+                                <h4 class="quiz">@Model.Questions[i].Text</h4>
+                            </div>
+                            <hr>
+                            <div class="card-body px-4">
+
+                                @for (int j = 0; j < Model.Questions[i].Choices.Count; j++)
+                                {
+
+                                    <div class="form-group mb-0">
+                                        <div class="mt-2">
+                                            <input type="checkbox" asp-for="@Model.Questions[i].Choices[j].IsSelected" />
+                                            <h6 class="d-inline-block mt-0 ml-1 quiz">@Model.Questions[i].Choices[j].Text</h6>
+                                        </div>
+                                    </div>
+                                }                             
+
+
+                            </div>
+                            </div>
+                        </div>
+                    }
+                                <button type="submit" class="btn btn-primary col-md-5 offset-md-3">
+                                    Submit Quiz
+                                </button>
+                                <!-- the modal -->
+                            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+

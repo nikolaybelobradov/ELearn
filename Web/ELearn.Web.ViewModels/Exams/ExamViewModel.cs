@@ -5,12 +5,13 @@
     using ELearn.Common.Enums;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Questions;
 
     public class ExamViewModel : IMapFrom<Exam>
     {
         public ExamViewModel()
         {
-            this.Questions = new HashSet<Question>();
+            this.Questions = new List<QuestionViewModel>();
         }
 
         public string Id { get; set; }
@@ -29,6 +30,6 @@
 
         public ApplicationUser Creator { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+        public IList<QuestionViewModel> Questions { get; set; }
     }
 }

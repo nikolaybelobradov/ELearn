@@ -24,6 +24,8 @@
         {
         }
 
+        public DbSet<Result> Results { get; set; }
+
         public DbSet<Course> Courses { get; set; }
 
         public DbSet<Exam> Exams { get; set; }

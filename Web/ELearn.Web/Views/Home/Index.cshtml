@@ -1,18 +1,27 @@
 ﻿@using ELearn.Common
+@using ELearn.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     this.ViewData["Title"] = "Home Page";
 }
-
-<div class="page-hero bg-primary text-white" id="banner">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-lg-8  offset-lg-2 text-center">
-                <div class="title">
-                    <h1 class="display-2 text-white">ELearn</h1>
-                    <h4 class="text-white">A new design system for developing with less effort.</h4>
+@if (!this.SignInManager.IsSignedIn(this.User))
+{
+    <div class="page-hero bg-primary text-white" id="banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-8  offset-lg-2 text-center">
+                    <div class="title">
+                        <h1 class="display-2 text-white">ELearn</h1>
+                        <h4 class="text-white">You must be logged in to use the system.</h4>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}else{
+
+}
 

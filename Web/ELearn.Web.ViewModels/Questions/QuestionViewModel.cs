@@ -1,12 +1,19 @@
 ﻿namespace ELearn.Web.ViewModels.Questions
 {
+    using System;
     using System.Collections.Generic;
 
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Choices;
 
     public class QuestionViewModel : IMapFrom<Question>
     {
+        public QuestionViewModel()
+        {
+            this.Choices = new List<ChoiceViewModel>();
+        }
+
         public string Id { get; set; }
 
         public string Text { get; set; }
@@ -17,6 +24,8 @@
 
         public Exam Exam { get; set; }
 
-        public ICollection<Choice> Choices { get; set; }
+        public IList<ChoiceViewModel> Choices { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

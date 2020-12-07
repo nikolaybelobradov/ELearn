@@ -20,6 +20,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="~/">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Courses"
+                           asp-action="Index">Courses</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -42,10 +47,11 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard">Dashboard</a>
 
-                                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)){
+                                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                {
                                     <a class="dropdown-item" asp-area="Administration" asp-controller="Users" asp-action="All">Users</a>
-                                }                               
-                                
+                                }
+
                                 <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="Index">Courses</a>
                                 <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="All">Exams</a>
                             </div>

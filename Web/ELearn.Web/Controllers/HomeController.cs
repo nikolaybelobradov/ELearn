@@ -3,11 +3,12 @@
     using System.Diagnostics;
 
     using ELearn.Web.ViewModels;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return this.View();
