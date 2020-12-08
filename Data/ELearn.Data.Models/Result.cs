@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Data.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,6 +8,11 @@
 
     public class Result : BaseDeletableModel<string>
     {
+        public Result()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Required]
         public int Points { get; set; }
 

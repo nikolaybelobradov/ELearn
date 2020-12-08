@@ -7,21 +7,32 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using ELearn.Common;
     using ELearn.Common.Enums;
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
     using ELearn.Web.ViewModels.Exams;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
     public class ExamsService : IExamsService
     {
         private readonly IDeletableEntityRepository<Exam> examRepository;
+        private readonly IDeletableEntityRepository<Result> resultRepository;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
-        public ExamsService(IDeletableEntityRepository<Exam> examRepository, IMapper mapper)
+        public ExamsService(
+                IDeletableEntityRepository<Exam> examRepository,
+                IDeletableEntityRepository<Result> resultRepository,
+                UserManager<ApplicationUser> userManager,
+                IMapper mapper)
         {
             this.examRepository = examRepository;
+            this.resultRepository = resultRepository;
+            this.userManager = userManager;
             this.mapper = mapper;
         }
 
@@ -99,7 +110,7 @@
             return exam;
         }
 
-        public int CalculateResultAsync(ExamViewModel viewModel)
+        public int CalculateResult(ExamViewModel viewModel)
         {
             var trueQuestionsCount = 0;
 
@@ -125,6 +136,75 @@
             var result = (trueQuestionsCount * 100) / viewModel.Questions.Count;
 
             return result;
+        }
+
+        public async Task SaveResultAsync(ExamViewModel viewModel, ApplicationUser currentUser)
+        {
+            var checkForResult = await this.CheckForResultAsync(viewModel.Id, currentUser.Id);
+
+            if (!checkForResult)
+            {
+                int points = this.CalculateResult(viewModel);
+
+                var result = new Result()
+                {
+                    Points = points,
+                    ExamId = viewModel.Id,
+                    UserId = currentUser.Id,
+                };
+
+                await this.resultRepository.AddAsync(result);
+                await this.resultRepository.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("You can take an exam only one time!");
+            }
+        }
+
+        public async Task<bool> CheckForResultAsync(string examId, string userId)
+        {
+            var result = await this.resultRepository.All()
+                .FirstOrDefaultAsync(x => (x.ExamId == examId) && (x.UserId == userId));
+
+            if (result != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task EditExamAsync(EditExamViewModel model)
+        {
+            var exam = await this.examRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            exam.Name = model.Name;
+            exam.Description = model.Description;
+            exam.QuestionsCount = model.QuestionsCount;
+            exam.QuestionsOrder = model.QuestionsOrder;
+            exam.ChoicesOrder = model.ChoicesOrder;
+
+            this.examRepository.Update(exam);
+            await this.examRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteExamAsync(string examId)
+        {
+            var exam = await this.examRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == examId);
+
+            this.examRepository.Delete(exam);
+            await this.examRepository.SaveChangesAsync();
+        }
+
+        public async Task CheckForPermissions(ExamViewModel exam, ApplicationUser user)
+        {
+            if (!await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName) && exam.Creator.Id != user.Id)
+            {
+                throw new ArgumentException("You do not have permission to perform this action. Please contact an administrator.");
+            }
         }
     }
 }

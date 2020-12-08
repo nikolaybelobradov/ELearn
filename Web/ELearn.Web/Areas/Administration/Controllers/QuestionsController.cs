@@ -37,11 +37,10 @@
         public async Task<IActionResult> Create(string id)
         {
             var exam = await this.examsService.GetExamByIdAsync(id);
-            var course = await this.coursesService.GetCourseByIdAsync(exam.CourseId);
 
             this.ViewData["ExamId"] = exam.Id;
             this.ViewData["ExamName"] = exam.Name;
-            this.ViewData["CourseName"] = course.Name;
+            this.ViewData["CourseName"] = exam.Course.Name;
 
             return this.View();
         }
@@ -64,11 +63,10 @@
         {
             var question = await this.questionsService.GetQuestionByIdAsync(id);
             var exam = await this.examsService.GetExamByIdAsync(question.ExamId);
-            var course = await this.coursesService.GetCourseByIdAsync(exam.CourseId);
 
             this.ViewData["QuestionId"] = id;
             this.ViewData["ExamName"] = exam.Name;
-            this.ViewData["CourseName"] = course.Name;
+            this.ViewData["CourseName"] = exam.Course.Name;
 
             var viewModel = new EditQuestionViewModel
             {
@@ -107,11 +105,10 @@
         {
             var question = await this.questionsService.GetQuestionByIdAsync(id);
             var exam = await this.examsService.GetExamByIdAsync(question.ExamId);
-            var course = await this.coursesService.GetCourseByIdAsync(exam.CourseId);
             var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
             this.ViewData["CurrentUserId"] = currentUser.Id;
-            this.ViewData["CourseName"] = course.Name;
+            this.ViewData["CourseName"] = exam.Course.Name;
 
             var viewModel = new QuestionDetailsViewModel()
             {

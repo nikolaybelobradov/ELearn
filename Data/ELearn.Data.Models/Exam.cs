@@ -14,6 +14,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Questions = new HashSet<Question>();
+            this.Results = new HashSet<Result>();
         }
 
         [Required]
@@ -45,5 +46,7 @@
         public virtual Course Course { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
+
+        public virtual ICollection<Result> Results { get; set; }
     }
 }

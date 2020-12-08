@@ -35,8 +35,11 @@
         [HttpPost]
         public async Task<IActionResult> Take(ExamViewModel viewModel)
         {
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
 
-            return this.View(viewModel);
+            await this.examsService.SaveResultAsync(viewModel, user);
+
+            return this.RedirectToAction("Index");
         }
     }
 }

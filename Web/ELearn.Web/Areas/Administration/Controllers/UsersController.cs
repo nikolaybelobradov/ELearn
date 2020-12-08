@@ -30,7 +30,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All(int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
+        public async Task<IActionResult> Index(int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
         {
             var users = await this.usersService.GetAllUsersAsync<UserViewModel>(page, countPerPage, keyword);
 
@@ -57,6 +57,51 @@
                 PagesCount = (int)Math.Ceiling(usersCount / (decimal)countPerPage),
             };
             return this.View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await this.userManager.FindByIdAsync(id);
+            var roles = await this.userManager.GetRolesAsync(user);
+
+            var role = "None";
+            if (roles.Count != 0)
+            {
+                role = string.Join(",", roles);
+            }
+
+            var viewModel = new EditUserViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                Role = role,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserViewModel viewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(viewModel);
+            }
+
+            await this.usersService.EditUserAsync(viewModel);
+
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.usersService.DeleteUserAsync(id);
+
+            return this.RedirectToAction("Index");
         }
     }
 }

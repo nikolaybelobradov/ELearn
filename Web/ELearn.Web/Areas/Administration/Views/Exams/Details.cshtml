@@ -1,8 +1,13 @@
 ﻿@model ExamViewModel
 
+@using ELearn.Common
+@using ELearn.Data.Models
+@using Microsoft.AspNetCore.Identity
+
 @{
     ViewData["Title"] = Model.Name;
     var i = 1;
+    var j = 1;
 }
 <div class="container">
 
@@ -15,7 +20,7 @@
                        asp-area="Administration"
                        asp-controller="Courses"
                        asp-action="Details"
-                       asp-route-id="@Model.CourseId">
+                       asp-route-id="@Model.Course.Id">
                         <i class="fas fa-arrow-left"></i>
                         Back
                     </a>
@@ -23,15 +28,16 @@
 
                     <h2>
                         @ViewData["Title"]
-                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id)
+                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id || 
+                            this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
-                            <a class="btn btn-warning btn-sm"
-                               asp-area="Administration"
-                               asp-controller="Questions"
-                               asp-action="Create"
-                               asp-route-id="@Model.Id">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                        <a class="btn btn-warning btn-sm"
+                           asp-area="Administration"
+                           asp-controller="Exams"
+                           asp-action="Edit"
+                           asp-route-id="@Model.Id">
+                            <i class="fas fa-edit"></i>
+                        </a>
                         }
                     </h2>
                     <p>@Model.Description</p>
@@ -44,12 +50,19 @@
                         <a class="nav-link active" data-toggle="tab" href="#questions"><i class="fas fa-file"></i> Questions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#users"><i class="fas fa-user-circle"></i> Users</a>
+                        <a class="nav-link" data-toggle="tab" href="#results"><i class="fas fa-poll"></i> Results</a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade show active" id="exams">
-                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id)
+                    <div class="input-group form-group flex-grow-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="search" flex-grow-1 mr-2" name="keyword" placeholder="Enter keyword...">
+                    </div>
+                    <div class="tab-pane fade show active" id="questions">
+                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
+                           this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <a class="btn btn-success"
                                asp-area="Administration"
@@ -61,12 +74,7 @@
                             </a>
                             <br /><br />
                         }
-                        <div class="input-group form-group flex-grow-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="search" flex-grow-1 mr-2" name="keyword" placeholder="Enter keyword...">
-                        </div>
+
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -90,14 +98,17 @@
                                         {
                                             <td><span class="badge badge-pill badge-danger">No</span></td>
                                         }
-                                        <td>
-                                            <a class="btn btn-info"
-                                               asp-area="Administration"
-                                               asp-controller="Questions"
-                                               asp-action="Details"
-                                               asp-route-id="@question.Id">
-                                                <i class="fas fa-info"></i>
-                                            </a>
+                                    <td>
+                                        <a class="btn btn-info"
+                                           asp-area="Administration"
+                                           asp-controller="Questions"
+                                           asp-action="Details"
+                                           asp-route-id="@question.Id">
+                                            <i class="fas fa-info"></i>
+                                        </a>
+                                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
+                                            this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                        {
                                             <a class="btn btn-warning"
                                                asp-area="Administration"
                                                asp-controller="Questions"
@@ -105,6 +116,7 @@
                                                asp-route-id="@question.Id">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                        }
                                         </td>
                                     </tr>
                                     i++;
@@ -112,8 +124,31 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="users">
-                        
+                    <div class="tab-pane fade" id="results">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">User Email</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var result in Model.Results.OrderByDescending(x => x.CreatedOn))
+                                {
+                                    <tr class="searchItem">
+                                        <td>@j</td>
+                                        <td>@result.User.Email</td>
+                                        <td>@result.User.FirstName @result.User.MiddleName @result.User.LastName</td>
+                                        <td>@result.CreatedOn.ToString("MM.dd.yyyy")</td>
+                                        <td>@result.Points%</td>
+                                    </tr>
+                                    j++;
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

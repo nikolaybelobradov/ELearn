@@ -1,0 +1,118 @@
+﻿@model EditExamViewModel
+
+@using ELearn.Common.Enums
+
+@{
+    ViewData["Title"] = "Edit exam";
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <a class="btn btn-warning btn-sm"
+                       asp-area="Administration"
+                       asp-controller="Exams"
+                       asp-action="Details"
+                       asp-route-id="@Model.Id">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                    <br /><br />
+
+                    <h2>
+                        @ViewData["Title"]
+                        <a class="btn btn-danger btn-sm"
+                           asp-area="Administration"
+                           asp-controller="Exams"
+                           asp-action="Delete"
+                           asp-route-id="@Model.Id"
+                           id="deleteButton"
+                           data-toggle="modal"
+                           data-target="#deleteConfirmationModal">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </h2>
+                    <p>You can change the information about this exam.</p>
+
+                    <p><b>Course:</b> @ViewData["CourseName"]</p>
+                </div>
+                <div class="component">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="@Model.Name">Name</label>
+                            <input asp-for="@Model.Name" class="form-control" placeholder="Enter exam name" value="@Model.Name">
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Description">Description</label>
+                            <textarea asp-for="@Model.Description" class="form-control" placeholder="Enter exam description" value="Model.Description"></textarea>
+                            <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.QuestionsCount">Questions Count</label>
+                            <input asp-for="@Model.QuestionsCount" class="form-control" placeholder="Enter questions count" value="@Model.QuestionsCount">
+                            <span asp-validation-for="@Model.QuestionsCount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.QuestionsOrder">Questions Order</label>
+                            <select asp-for="@Model.QuestionsOrder" class="form-control">
+                                @if (@Model.QuestionsOrder == OrderType.Fixed)
+                                {
+                                    <option value="@OrderType.Fixed" selected>@OrderType.Fixed</option>
+                                    <option value="@OrderType.Random">@OrderType.Random</option>
+                                }
+                                else
+                                {
+                                    <option value="@OrderType.Fixed">@OrderType.Fixed</option>
+                                    <option value="@OrderType.Random" selected>@OrderType.Random</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ChoicesOrder">Choices Order</label>
+                            <select asp-for="@Model.ChoicesOrder" class="form-control">
+                                @if (@Model.ChoicesOrder == OrderType.Fixed)
+                                {
+                                    <option value="@OrderType.Fixed" selected>@OrderType.Fixed</option>
+                                    <option value="@OrderType.Random">@OrderType.Random</option>
+                                }
+                                else
+                                {
+                                    <option value="@OrderType.Fixed">@OrderType.Fixed</option>
+                                    <option value="@OrderType.Random" selected>@OrderType.Random</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <a class="btn btn-warning col-md-5 mt-5"
+                               asp-area="Administration"
+                               asp-controller="Exams"
+                               asp-action="Details"
+                               asp-route-id="@Model.Id">
+                                Cancel
+                            </a>
+                            <div class="col-1 mr-4"></div>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="_DeleteConfirmationModalPartial" />
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/modalButtons.js"></script>
+}
+

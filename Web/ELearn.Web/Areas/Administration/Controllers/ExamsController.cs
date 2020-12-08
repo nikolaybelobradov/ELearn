@@ -57,13 +57,61 @@
         public async Task<IActionResult> Details(string id)
         {
             var exam = await this.examsService.GetExamByIdAsync(id);
-            var course = await this.coursesService.GetCourseByIdAsync(exam.CourseId);
             var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
             this.ViewData["CurrentUserId"] = currentUser.Id;
-            this.ViewData["CourseName"] = course.Name;
+            this.ViewData["CourseName"] = exam.Course.Name;
 
             return this.View(exam);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var exam = await this.examsService.GetExamByIdAsync(id);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.examsService.CheckForPermissions(exam, user);
+
+            this.ViewData["CourseName"] = exam.Course.Name;
+
+            var viewModel = new EditExamViewModel
+            {
+                Id = exam.Id,
+                Name = exam.Name,
+                Description = exam.Description,
+                QuestionsCount = exam.QuestionsCount,
+                QuestionsOrder = exam.QuestionsOrder,
+                ChoicesOrder = exam.ChoicesOrder,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditExamViewModel viewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(viewModel);
+            }
+
+            await this.examsService.EditExamAsync(viewModel);
+
+            return this.RedirectToAction("Details", "Exams", new { id = viewModel.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var exam = await this.examsService.GetExamByIdAsync(id);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.examsService.CheckForPermissions(exam, user);
+
+            await this.examsService.DeleteExamAsync(id);
+
+            return this.RedirectToAction("Details", "Courses", new { id = exam.Course.Id });
         }
     }
 }

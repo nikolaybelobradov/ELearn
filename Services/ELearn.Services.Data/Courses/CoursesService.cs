@@ -115,15 +115,22 @@
 
         public async Task ExitCourseAsync(ApplicationUser currentUser, string courseId)
         {
-            var course = await this.courseRepository.All().FirstOrDefaultAsync(x => x.Id == courseId);
+            var course = await this.courseRepository.All()
+                .To<CourseViewModel>().FirstOrDefaultAsync(x => x.Id == courseId);
+            var course2 = await this.courseRepository.All()
+            .FirstOrDefaultAsync(x => x.Id == courseId);
+
+            course2.Users = course.Users;
 
             var itemToRemove = course.Users.FirstOrDefault(x => x.Id == currentUser.Id);
+            var asd = 0;
 
-            if (course.Users.Contains(itemToRemove))
+            if (course2.Users.Contains(itemToRemove))
             {
-                course.Users.Remove(itemToRemove);
+                course2.Users.Remove(itemToRemove);
             }
 
+            this.courseRepository.Update(course2);
             await this.courseRepository.SaveChangesAsync();
         }
 

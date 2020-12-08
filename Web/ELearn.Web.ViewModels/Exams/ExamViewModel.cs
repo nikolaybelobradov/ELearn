@@ -12,6 +12,7 @@
         public ExamViewModel()
         {
             this.Questions = new List<QuestionViewModel>();
+            this.Results = new HashSet<Result>();
         }
 
         public string Id { get; set; }
@@ -26,10 +27,12 @@
 
         public OrderType ChoicesOrder { get; set; }
 
-        public string CourseId { get; set; }
+        public Course Course { get; set; }
 
         public ApplicationUser Creator { get; set; }
 
         public IList<QuestionViewModel> Questions { get; set; }
+
+        public ICollection<Result> Results { get; set; }
     }
 }
