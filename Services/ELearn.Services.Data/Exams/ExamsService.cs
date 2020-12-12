@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -15,7 +14,6 @@
     using ELearn.Web.ViewModels.Exams;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
     public class ExamsService : IExamsService
     {
@@ -76,7 +74,9 @@
         {
             var exam = await this.GetExamByIdAsync(examId);
 
-            exam.Questions = exam.Questions.Where(x => (x.IsActive == true) && (x.Choices.Count > 0)).ToList();
+            exam.Questions = exam.Questions
+                .Where(x => (x.IsActive == true) && (x.Choices.Count > 0) && (x.Choices.Where(y => y.IsTrue == true).Count() > 0))
+                .ToList();
 
             if (exam.QuestionsOrder == OrderType.Random)
             {

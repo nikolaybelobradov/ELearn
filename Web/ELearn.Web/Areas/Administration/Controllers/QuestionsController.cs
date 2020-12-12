@@ -63,6 +63,9 @@
         {
             var question = await this.questionsService.GetQuestionByIdAsync(id);
             var exam = await this.examsService.GetExamByIdAsync(question.ExamId);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.examsService.CheckForPermissions(exam, user);
 
             this.ViewData["QuestionId"] = id;
             this.ViewData["ExamName"] = exam.Name;
@@ -94,6 +97,10 @@
         public async Task<IActionResult> Delete(string id)
         {
             var question = await this.questionsService.GetQuestionByIdAsync(id);
+            var exam = await this.examsService.GetExamByIdAsync(question.ExamId);
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.examsService.CheckForPermissions(exam, user);
 
             await this.questionsService.DeleteQuestionAsync(id);
 

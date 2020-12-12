@@ -1,8 +1,6 @@
-﻿@model ExamViewModel
+﻿@using ELearn.Common
 
-@using ELearn.Common
-@using ELearn.Data.Models
-@using Microsoft.AspNetCore.Identity
+@model ExamViewModel
 
 @{
     ViewData["Title"] = Model.Name;
@@ -28,16 +26,16 @@
 
                     <h2>
                         @ViewData["Title"]
-                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id || 
-                            this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
+                           this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
-                        <a class="btn btn-warning btn-sm"
-                           asp-area="Administration"
-                           asp-controller="Exams"
-                           asp-action="Edit"
-                           asp-route-id="@Model.Id">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                            <a class="btn btn-warning btn-sm"
+                               asp-area="Administration"
+                               asp-controller="Exams"
+                               asp-action="Edit"
+                               asp-route-id="@Model.Id">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         }
                     </h2>
                     <p>@Model.Description</p>
@@ -62,7 +60,7 @@
                     </div>
                     <div class="tab-pane fade show active" id="questions">
                         @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
-                           this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                          this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <a class="btn btn-success"
                                asp-area="Administration"
@@ -98,25 +96,25 @@
                                         {
                                             <td><span class="badge badge-pill badge-danger">No</span></td>
                                         }
-                                    <td>
-                                        <a class="btn btn-info"
-                                           asp-area="Administration"
-                                           asp-controller="Questions"
-                                           asp-action="Details"
-                                           asp-route-id="@question.Id">
-                                            <i class="fas fa-info"></i>
-                                        </a>
-                                        @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
-                                            this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                                        {
-                                            <a class="btn btn-warning"
+                                        <td>
+                                            <a class="btn btn-info"
                                                asp-area="Administration"
                                                asp-controller="Questions"
-                                               asp-action="Edit"
+                                               asp-action="Details"
                                                asp-route-id="@question.Id">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-info"></i>
                                             </a>
-                                        }
+                                            @if (ViewData["CurrentUserId"].ToString() == Model.Creator.Id ||
+                                               this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                            {
+                                                <a class="btn btn-warning"
+                                                   asp-area="Administration"
+                                                   asp-controller="Questions"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@question.Id">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            }
                                         </td>
                                     </tr>
                                     i++;
@@ -157,23 +155,5 @@
 </div>
 <br />
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            function Contains(text_one, text_two) {
-                if (text_one.indexOf(text_two) != -1)
-                    return true;
-            }
-            $("#search").keyup(function () {
-                var searchText = $("#search").val().toLowerCase();
-                $(".searchItem").each(function () {
-                    if (!Contains($(this).text().toLowerCase(), searchText)) {
-                        $(this).hide();
-                    }
-                    else {
-                        $(this).show();
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="~/js/search.js"></script>
 }

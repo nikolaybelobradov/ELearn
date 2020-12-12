@@ -1,15 +1,15 @@
-﻿namespace ELearn.Web.ViewModels.Users
+﻿namespace ELearn.Web.ViewModels.Results
 {
     using System.Collections.Generic;
 
-    public class AllUsersViewModel
+    public class ResultsViewModel
     {
-        public AllUsersViewModel()
+        public ResultsViewModel()
         {
-            this.Users = new HashSet<UserViewModel>();
+            this.Results = new HashSet<ResultViewModel>();
         }
 
-        public IEnumerable<UserViewModel> Users { get; set; }
+        public IEnumerable<ResultViewModel> Results { get; set; }
 
         public string Keyword { get; set; }
 

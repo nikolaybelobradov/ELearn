@@ -1,4 +1,6 @@
-﻿@model QuestionDetailsViewModel
+﻿@using ELearn.Common
+
+@model QuestionDetailsViewModel
 
 @{
     ViewData["Title"] = Model.QuestionViewModel.Text;
@@ -23,28 +25,34 @@
 
                     <h2>
                         @ViewData["Title"]
-                        @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.Creator.Id)
+                        @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
+                        this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
-                        <a class="btn btn-warning btn-sm"
-                           asp-area="Administration"
-                           asp-controller="Questions"
-                           asp-action="Create">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                            <a class="btn btn-warning btn-sm"
+                               asp-area="Administration"
+                               asp-controller="Questions"
+                               asp-action="Create">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         }
                     </h2>
 
                     <p><b>Exam:</b> @Model.QuestionViewModel.Exam.Name</p>
+                    <p><b>Course:</b> @Model.QuestionViewModel.Exam.Course.Name</p>
                 </div>
 
                 <ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-4 col-12">
                     <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#choices"><i class="fas fa-file"></i> Choices</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#addChoice"><i class="fas fa-plus"></i> Add Choice</a>
-                    </li>
-                </ul>
+                    @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
+                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#addChoice"><i class="fas fa-plus"></i> Add Choice</a>
+                        </li>
+                    }
+                    </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="choices">
                         <div class="input-group form-group flex-grow-1">
@@ -59,63 +67,75 @@
                                     <th scope="col">№</th>
                                     <th scope="col">Text</th>
                                     <th scope="col">Correct</th>
-                                    <th scope="col">Options</th>
+                                    @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
+                                       this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                    {
+                                        <th scope="col">Options</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var choice in Model.QuestionViewModel.Choices.OrderBy(x => x.CreatedOn))
                                 {
-                                <tr class="searchItem">
-                                    <td>@i</td>
-                                    <td>@choice.Text</td>
-                                    @if (@choice.IsTrue == true)
+                                    <tr class="searchItem">
+                                        <td>@i</td>
+                                        <td>@choice.Text</td>
+                                        @if (@choice.IsTrue == true)
                                         {
-                                    <td><span class="badge badge-pill badge-success">Yes</span></td>
+                                            <td><span class="badge badge-pill badge-success">Yes</span></td>
                                         }
                                         else
                                         {
-                                    <td><span class="badge badge-pill badge-danger">No</span></td>
+                                            <td><span class="badge badge-pill badge-danger">No</span></td>
                                         }
-                                    <td>
-                                        <a class="btn btn-warning"
-                                           asp-area="Administration"
-                                           asp-controller="Questions"
-                                           asp-action="Edit"
-                                           asp-route-id="@choice.Id">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
+                                         this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                        {
+                                            <td>
+                                                <a class="btn btn-warning"
+                                                   asp-area="Administration"
+                                                   asp-controller="Choices"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@choice.Id">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        }
+                                    </tr>
                                     i++;
                                 }
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="addChoice">
-                        <form method="post">
-                            <div class="form-group">
-                                <label asp-for="@Model.AddChoiceViewModel.Text">Text</label>
-                                <input asp-for="@Model.AddChoiceViewModel.Text" class="form-control" placeholder="Enter choice text">
-                                <span asp-validation-for="@Model.AddChoiceViewModel.Text" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.AddChoiceViewModel.IsTrue">Correct ?</label>
-                                <select asp-for="@Model.AddChoiceViewModel.IsTrue" class="form-control">
-                                    <option selected disabled="disabled">-- Select --</option>"
-                                    <option value="true">Yes</option>
-                                    <option value="false">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" asp-for="@Model.AddChoiceViewModel.QuestionId" value="@Model.QuestionViewModel.Id" />
-                            </div>
-                            <div class="row mx-4 text-white">
-                                <button type="reset" class="btn btn-primary col-md-5 mt-5">Clear</button>
-                                <div class="col-1 mr-4"></div>
-                                <button type="submit" class="btn btn-primary col-md-5 mt-5">Add</button>
-                            </div>
-                        </form>
-                    </div>
+                    @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
+                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <div class="tab-pane fade" id="addChoice">
+                            <form method="post">
+                                <div class="form-group">
+                                    <label asp-for="@Model.AddChoiceViewModel.Text">Text</label>
+                                    <input asp-for="@Model.AddChoiceViewModel.Text" class="form-control" placeholder="Enter choice text">
+                                    <span asp-validation-for="@Model.AddChoiceViewModel.Text" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="@Model.AddChoiceViewModel.IsTrue">Correct ?</label>
+                                    <select asp-for="@Model.AddChoiceViewModel.IsTrue" class="form-control">
+                                        <option selected disabled="disabled">-- Select --</option>"
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" asp-for="@Model.AddChoiceViewModel.QuestionId" value="@Model.QuestionViewModel.Id" />
+                                </div>
+                                <div class="row mx-4 text-white">
+                                    <button type="reset" class="btn btn-primary col-md-5 mt-5">Clear</button>
+                                    <div class="col-1 mr-4"></div>
+                                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -125,23 +145,5 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
-            function Contains(text_one, text_two) {
-                if (text_one.indexOf(text_two) != -1)
-                    return true;
-            }
-            $("#search").keyup(function () {
-                var searchText = $("#search").val().toLowerCase();
-                $(".searchItem").each(function () {
-                    if (!Contains($(this).text().toLowerCase(), searchText)) {
-                        $(this).hide();
-                    }
-                    else {
-                        $(this).show();
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="~/js/search.js"></script>
 }

@@ -13,10 +13,12 @@
     using ELearn.Data.Seeding;
     using ELearn.Services;
     using ELearn.Services.Data;
+    using ELearn.Services.Data.Administration;
     using ELearn.Services.Data.Choices;
     using ELearn.Services.Data.Courses;
     using ELearn.Services.Data.Exams;
     using ELearn.Services.Data.Questions;
+    using ELearn.Services.Data.Results;
     using ELearn.Services.Data.Users;
     using ELearn.Services.Mapping;
     using ELearn.Services.Messaging;
@@ -73,9 +75,11 @@
             services.AddAutoMapper(typeof(ELearnProfile));
 
             // Application services
+            services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ICoursesService, CoursesService>();
             services.AddTransient<IExamsService, ExamsService>();
+            services.AddTransient<IResultsService, ResultsService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IChoicesService, ChoicesService>();
             services.AddTransient<IEmailSender, NullMessageSender>();

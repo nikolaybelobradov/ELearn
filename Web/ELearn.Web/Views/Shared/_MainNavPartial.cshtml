@@ -33,7 +33,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <span><b>@FullName</b></span>
                             <a class="dropdown-item" href="#">My courses</a>
-                            <a class="dropdown-item" href="#">My results</a>
+                            <a class="dropdown-item" asp-controller="Results" asp-action="Index">My results</a>
                             <a class="dropdown-item" href="#">Marketing</a>
                         </div>
                     </li>
@@ -45,7 +45,7 @@
                                 Admin panel
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard">Dashboard</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
 
                                 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                                 {
@@ -53,7 +53,7 @@
                                 }
 
                                 <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="Index">Courses</a>
-                                <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="All">Exams</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Exams" asp-action="Index">My Exams</a>
                             </div>
                         </li>
                     }

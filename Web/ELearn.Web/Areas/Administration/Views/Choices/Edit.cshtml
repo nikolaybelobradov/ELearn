@@ -1,0 +1,93 @@
+﻿@model EditChoiceViewModel
+@{
+    ViewData["Title"] = "Edit question";
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <a class="btn btn-warning btn-sm"
+                       asp-area="Administration"
+                       asp-controller="Questions"
+                       asp-action="Details"
+                       asp-route-id="@ViewData["QuestionId"]">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                    <br /><br />
+
+                    <h2>
+                        @ViewData["Title"]
+                        <a class="btn btn-danger btn-sm"
+                           asp-area="Administration"
+                           asp-controller="Choices"
+                           asp-action="Delete"
+                           asp-route-id="@Model.Id"
+                           id="deleteButton"
+                           data-toggle="modal"
+                           data-target="#deleteConfirmationModal">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </h2>
+                    <p>You can change the information about this choice.</p>
+
+                    <p><b>Question:</b> @ViewData["QuestionText"]</p>
+                    <p><b>Exam:</b> @ViewData["ExamName"]</p>
+                    <p><b>Course:</b> @ViewData["CourseName"]</p>
+                </div>
+                <div class="component">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="@Model.Text">Text</label>
+                            <input asp-for="@Model.Text" class="form-control" value="@Model.Text">
+                            <span asp-validation-for="@Model.Text" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.IsTrue">Correct ?</label>
+                            <select asp-for="@Model.IsTrue" class="form-control">
+                                @if (@Model.IsTrue)
+                                {
+                                    <option value="true" selected>Yes</option>
+                                    <option value="false">No</option>
+                                }
+                                else
+                                {
+                                    <option value="true">Yes</option>
+                                    <option value="false" selected>No</option>
+                                }
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <a class="btn btn-warning col-md-5 mt-5"
+                               asp-area="Administration"
+                               asp-controller="Questions"
+                               asp-action="Details"
+                               asp-route-id="@ViewData["QuestionId"]">
+                                Cancel
+                            </a>
+                            <div class="col-1 mr-4"></div>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="_DeleteConfirmationModalPartial" />
+</div>
+
+<br />
+<br />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/modalButtons.js"></script>
+}
+
