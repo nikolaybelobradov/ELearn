@@ -1,5 +1,7 @@
 ﻿namespace ELearn.Web.ViewModels.Results
 {
+    using System;
+
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
 
@@ -10,5 +12,7 @@
         public ApplicationUser User { get; set; }
 
         public Exam Exam { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

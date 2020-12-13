@@ -1,7 +1,106 @@
-﻿
+﻿@model ResultsViewModel
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My results";
+    var j = 1;
 }
 
-<h1>Index</h1>
+<div class="container">
 
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <br />
+                </div>
+                    <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Results" asp-action="Index">
+                        <div class="input-group form-group flex-grow-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter exam name..." value="@Model.Keyword">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                    </form>
+                <div class="component">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Exam Name</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Results.Count() > 0)
+                            {
+                                @foreach (var result in Model.Results)
+                                {
+                                    <tr class="table-light">
+                                        <td>@j</td>
+                                        <td>@result.Exam.Name</td>
+                                        <td>@result.CreatedOn.ToString("MM.dd.yyyy")</td>
+                                        <td>@result.Points %</td>
+                                    </tr>
+                                    j++;
+                                }
+                            }else{
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">No results</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (Model.PagesCount > 1)
+                    {
+                        var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+                        var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+                        <div class="text-center mt-4">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item @disabledLeftArrow">
+                                    <a class="page-link"
+                                       asp-area=""
+                                       asp-controller="Results"
+                                       asp-action="Index"
+                                       asp-route-page="@Model.PreviousPage"
+                                       asp-route-keyword="@Model.Keyword">
+                                        <i class="fas fa-long-arrow-alt-left"></i>
+                                    </a>
+                                </li>
+                                @for (int i = 1; i <= Model.PagesCount; i++)
+                                {
+                                    var active = i == Model.CurrentPage ? "active" : string.Empty;
+                                    <li class="page-item @active">
+                                        <a class="page-link"
+                                           asp-area=""
+                                           asp-controller="Results"
+                                           asp-action="Index"
+                                           asp-route-page="@i"
+                                           asp-route-keyword="@Model.Keyword">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+                                <li class="page-item @disabledRightArrow">
+                                    <a class="page-link"
+                                       asp-area=""
+                                       asp-controller="Results"
+                                       asp-action="Index"
+                                       asp-route-page="@Model.NextPage"
+                                       asp-route-keyword="@Model.Keyword">
+                                        <i class="fas fa-long-arrow-alt-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

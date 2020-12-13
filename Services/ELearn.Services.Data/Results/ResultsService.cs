@@ -20,6 +20,14 @@
             this.resultRepository = resultRepository;
         }
 
+        public async Task<int> GetUserResultByExamIdAsync(string examId, string userId)
+        {
+            var result = await this.resultRepository.All()
+                .FirstOrDefaultAsync(x => (x.ExamId == examId) && (x.UserId == userId));
+
+            return result.Points;
+        }
+
         public async Task<IEnumerable<T>> GetUserResultsAsync<T>(ApplicationUser user, int page, int countPerPage, string keyword = null)
         {
             var results = this.resultRepository

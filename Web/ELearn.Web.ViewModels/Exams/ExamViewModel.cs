@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Web.ViewModels.Exams
 {
+    using System;
     using System.Collections.Generic;
 
     using ELearn.Common.Enums;
@@ -34,5 +35,7 @@
         public IList<QuestionViewModel> Questions { get; set; }
 
         public ICollection<Result> Results { get; set; }
+
+        public DateTime CreatedOn { get; set; }
     }
 }

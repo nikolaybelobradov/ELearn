@@ -1,0 +1,145 @@
+﻿@using ELearn.Common.Enums
+@using ELearn.Services.Data.Exams
+@using ELearn.Services.Data.Results
+
+@model CourseDetailsViewModel
+
+@inject IExamsService examsService
+@inject IResultsService resultsService
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+<div class="container">
+
+    <div class="section">
+
+        <div class="section">
+
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="page-header">
+                        <h2><i class="fas fa-chalkboard-teacher" title="Course Name"></i> @ViewData["Title"]</h2>
+                        <p><i class="fa fa-info-circle" title="Course Description"></i> @Model.Description</p>
+                        <br />
+                    </div>
+
+                    <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Courses" asp-action="Details">
+                        <div class="input-group form-group flex-grow-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter exam name..." value="@Model.Keyword">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="row">
+                @if (Model.Exams.Count() > 0)
+                {
+                    @foreach (var exam in Model.Exams.OrderByDescending(x => x.CreatedOn))
+                    {
+                        <div class="col-md-4">
+                            <div class="component">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title"><i class="far fa-list-alt" title="Exam Name"></i> @exam.Name</h4>
+                                        <p class="card-text"><i class="fa fa-info-circle" title="Exam Description"></i> @exam.Description </p>
+                                        <p class="card-text">
+                                            <i class="fa fa-question-circle" title="Questions Count"></i> Questions: @exam.QuestionsCount
+                                            @if (exam.QuestionsOrder == OrderType.Random)
+                                            {
+                                                <i class="fa fa-random" title="Random Order"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-long-arrow-alt-right" title="Fixed Order"></i>
+                                            }
+                                        </p>
+                                        <p class="card-text"><i class="fas fa-user-graduate" title="Exam Creator"></i> @exam.Creator.FirstName @exam.Creator.LastName </p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <center>
+
+                                            @if (await this.examsService.CheckForResultAsync(exam.Id, ViewData["userId"].ToString()))
+                                            {
+                                                var result = await this.resultsService.GetUserResultByExamIdAsync(exam.Id, ViewData["userId"].ToString());
+                                                <a asp-area=""
+                                                   asp-controller="Results"
+                                                   asp-action="Index"
+                                                   class="btn btn-info">Your result is @result%</a>
+
+                                            }
+                                            else
+                                            {
+                                                <a asp-area=""
+                                                   asp-controller="Exams"
+                                                   asp-action="Take"
+                                                   asp-route-id="@exam.Id"
+                                                   class="btn btn-success">Take</a>
+                                            }
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-8 offset-md-2">
+                        <center>
+                            <h3>No Exams</h3>
+                        </center>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Model.PagesCount > 1)
+        {
+            var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+            var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+            <div class="text-center mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @disabledLeftArrow">
+                        <a class="page-link"
+                           asp-area=""
+                           asp-controller="Courses"
+                           asp-action="Details"
+                           asp-route-page="@Model.PreviousPage"
+                           asp-route-keyword="@Model.Keyword">
+                            <i class="fas fa-long-arrow-alt-left"></i>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= Model.PagesCount; i++)
+                    {
+                        var active = i == Model.CurrentPage ? "active" : string.Empty;
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               asp-area=""
+                               asp-controller="Courses"
+                               asp-action="Details"
+                               asp-route-page="@i"
+                               asp-route-keyword="@Model.Keyword">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item @disabledRightArrow">
+                        <a class="page-link"
+                           asp-area=""
+                           asp-controller="Courses"
+                           asp-action="Details"
+                           asp-route-page="@Model.NextPage"
+                           asp-route-keyword="@Model.Keyword">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+<br />

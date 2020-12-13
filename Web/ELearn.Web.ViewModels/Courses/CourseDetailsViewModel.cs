@@ -1,15 +1,24 @@
 ﻿namespace ELearn.Web.ViewModels.Courses
 {
     using System.Collections.Generic;
+    using ELearn.Data.Models;
+    using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Exams;
 
-    public class CoursesViewModel
+    public class CourseDetailsViewModel : IMapFrom<Course>
     {
-        public CoursesViewModel()
+        public CourseDetailsViewModel()
         {
-            this.Courses = new HashSet<CourseViewModel>();
+            this.Exams = new HashSet<ExamViewModel>();
         }
 
-        public IEnumerable<CourseViewModel> Courses { get; set; }
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public IEnumerable<ExamViewModel> Exams { get; set; }
 
         public string Keyword { get; set; }
 

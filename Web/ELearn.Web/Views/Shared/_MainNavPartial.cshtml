@@ -22,6 +22,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
+                           asp-area=""
                            asp-controller="Courses"
                            asp-action="Index">Courses</a>
                     </li>
@@ -32,9 +33,9 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <span><b>@FullName</b></span>
-                            <a class="dropdown-item" href="#">My courses</a>
-                            <a class="dropdown-item" asp-controller="Results" asp-action="Index">My results</a>
-                            <a class="dropdown-item" href="#">Marketing</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Courses" asp-action="My"><i class="fas fa-chalkboard-teacher"></i> My courses</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Results" asp-action="Index"><i class="fas fa-poll"></i> My results</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
                         </div>
                     </li>
                     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.LecturerRoleName))
@@ -45,15 +46,15 @@
                                 Admin panel
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-chart-line"></i> Dashboard</a>
 
                                 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                                 {
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Users" asp-action="Index">Users</a>
+                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Users" asp-action="Index"><i class="fa fa-users"></i> Users</a>
                                 }
 
-                                <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="Index">Courses</a>
-                                <a class="dropdown-item" asp-area="Administration" asp-controller="Exams" asp-action="Index">My Exams</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Courses" asp-action="Index"><i class="fas fa-chalkboard-teacher"></i> Courses</a>
+                                <a class="dropdown-item" asp-area="Administration" asp-controller="Exams" asp-action="Index"><i class="far fa-list-alt"></i> My Exams</a>
                             </div>
                         </li>
                     }

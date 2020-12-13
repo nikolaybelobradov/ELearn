@@ -1,7 +1,115 @@
-﻿
+﻿@model CoursesViewModel
+
 @{
-    ViewData["Title"] = "My";
+    ViewData["Title"] = "My Courses";
 }
+<div class="container">
 
-<h1>My</h1>
+    <div class="section">
 
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <br />
+                </div>
+
+                <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Courses" asp-action="My">
+                    <div class="input-group form-group flex-grow-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter course name..." value="@Model.Keyword">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="row">
+            @if (Model.Courses.Count() > 0)
+            {
+                @foreach (var course in Model.Courses)
+                {
+                    <div class="col-md-4">
+                        <div class="component">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">@course.Name</h4>
+                                    <p class="card-text">@course.Description </p>
+                                </div>
+                                <div class="card-footer">
+                                    <center>
+                                        <a asp-area=""
+                                           asp-controller="Courses"
+                                           asp-action="Details"
+                                           asp-route-id="@course.Id"
+                                           class="btn btn-primary">Details</a>
+
+                                        <a asp-area=""
+                                           asp-controller="Courses"
+                                           asp-action="Exit"
+                                           asp-route-id="@course.Id"
+                                           class="btn btn-dark">Exit</a>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-md-8 offset-md-2">
+                    <center>
+                    <h3>No Results</h3>
+                        </center>
+                </div>
+                }
+        </div>
+        @if (Model.PagesCount > 1)
+        {
+            var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+            var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+            <div class="text-center mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @disabledLeftArrow">
+                        <a class="page-link"
+                           asp-area=""
+                           asp-controller="Courses"
+                           asp-action="My"
+                           asp-route-page="@Model.PreviousPage"
+                           asp-route-keyword="@Model.Keyword">
+                            <i class="fas fa-long-arrow-alt-left"></i>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= Model.PagesCount; i++)
+                    {
+                        var active = i == Model.CurrentPage ? "active" : string.Empty;
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               asp-area=""
+                               asp-controller="Courses"
+                               asp-action="My"
+                               asp-route-page="@i"
+                               asp-route-keyword="@Model.Keyword">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item @disabledRightArrow">
+                        <a class="page-link"
+                           asp-area=""
+                           asp-controller="Courses"
+                           asp-action="My"
+                           asp-route-page="@Model.NextPage"
+                           asp-route-keyword="@Model.Keyword">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+        </div>
+</div>
+<br />

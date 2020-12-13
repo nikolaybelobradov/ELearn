@@ -36,5 +36,34 @@
             };
             return this.View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> My(int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
+        {
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            var courses = await this.coursesService.GetMyCoursesAsync<CourseViewModel>(currentUser, page, countPerPage, keyword);
+
+            var coursesCount = await this.coursesService.GetMyCoursesCountAsync(currentUser, keyword);
+            var model = new CoursesViewModel()
+            {
+                Courses = courses,
+                CurrentPage = page,
+                PagesCount = (int)Math.Ceiling(coursesCount / (decimal)countPerPage),
+            };
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id, int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
+        {
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            this.ViewData["userId"] = currentUser.Id;
+
+            var course = await this.coursesService.GetCourseByIdPagedAsync(id, page, countPerPage, keyword);
+
+            return this.View(course);
+        }
     }
 }
