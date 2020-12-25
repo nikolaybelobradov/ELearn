@@ -15,7 +15,7 @@
     {
         private readonly IDeletableEntityRepository<Result> resultRepository;
 
-        public ResultsService(IDeletableEntityRepository<Result> resultRepository, IMapper mapper)
+        public ResultsService(IDeletableEntityRepository<Result> resultRepository)
         {
             this.resultRepository = resultRepository;
         }

@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Result";
+}
+
+    <div class="container-fluid">
+        <div class="col-12 offset-md-2 col-md-8 my-3 row">
+            <form method="post" class="col-11 ml-4 mb-5">
+                <div id="informationBox" class="component pt-2">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-primary pb-0" style="font-size: xx-large">
+                            <i class="fas fa-poll"></i>
+                            <p class="display-5 d-inline-block">Result:</p>
+                        </div>
+                        <div class="card-body pt-1">
+                            <h4 class="card-title" style="text-align: center;" title="Exam Name">
+                                Your result is @ViewData["Result"]%.
+                            </h4>
+                            <h4 class="card-title" style="text-align: center;" title="Exam Name">
+                                Congratulations, you have completed the exam.
+                            </h4>
+                        </div>
+                        <div class="card-footer py-3">
+                            <div class="row mx-1 text-white">
+                                <a class="btn btn-primary col-md-4 mt-5 offset-md-1"
+                                   asp-area=""
+                                   asp-controller="Results"
+                                   asp-action="Index">Go to Results</a>
+                                <a class="btn btn-primary col-md-4 mt-5 offset-md-1"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index">Go to Home Page</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+

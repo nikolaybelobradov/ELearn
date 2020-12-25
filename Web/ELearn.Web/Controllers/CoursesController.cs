@@ -8,10 +8,11 @@
     using ELearn.Web.ViewModels.Courses;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
     public class CoursesController : BaseController
     {
-        private const int PerPageDefaultValue = 3;
+        private const int PerPageDefaultValue = 9;
         private readonly ICoursesService coursesService;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -55,13 +56,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string id, int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
+        public async Task<IActionResult> Details(string id)
         {
             var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
             this.ViewData["userId"] = currentUser.Id;
 
-            var course = await this.coursesService.GetCourseByIdPagedAsync(id, page, countPerPage, keyword);
+            var course = await this.coursesService.GetCourseByIdAsync(id);
 
             return this.View(course);
         }

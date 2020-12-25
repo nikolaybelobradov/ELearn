@@ -1,4 +1,7 @@
-﻿@model ExamViewModel
+﻿@using ELearn.Common.Enums
+
+
+@model ExamViewModel
 
 @{
     ViewData["Title"] = "Take Quiz";
@@ -7,40 +10,52 @@
 <div class="container-fluid">
     <div class="col-12 offset-md-2 col-md-8 my-3 row">
         <form method="post" class="col-11 ml-4 mb-5">
-            <div id="informationBox" class="component pt-2">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <i class="fa fa-exclamation-circle"></i>
-                    <strong>Warning!</strong>
-                    There is only one attempt to take the exam.
-                    Be careful not to close the page by mistake,
-                    as you will not be able to return again.
-                </div>
-                <div class="card mb-3 mt-3">
-                    <div class="card-header text-info pb-0" style="font-size: xx-large">
-                        <i class="far fa-list-alt"></i>
-                        <p class="display-5 d-inline-block">Exam:</p>
+                <div id="informationBox" class="component pt-2">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <strong>Warning!</strong>
+                        There is only one attempt to take the exam.
+                        Be careful not to close the page by mistake,
+                        as you will not be able to return again.
                     </div>
-                    <div class="card-body pt-1">
-                        <h4 class="card-title">@Model.Name</h4>
-                        <p>@Model.Description</p>
-                        <p class="card-text border-top pt-2" style="display: block;">&nbsp;</p>
-                    </div>
-                    <div class="card-footer py-3">
-                        <div class="row mx-1 text-white">
-                            <a class="btn btn-dark col-md-4 mt-5 offset-md-1"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">Cancel</a>
-                            <a href="#" class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" onclick="TakeExam()">Take</a>
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-info pb-0" style="font-size: xx-large">
+                            <i class="far fa-list-alt"></i>
+                            <p class="display-5 d-inline-block">Exam:</p>
+                        </div>
+                        <div class="card-body pt-1">
+                            <h4 class="card-title" title="Exam Name">@Model.Name</h4>
+                            <p title="Exam Description">@Model.Description</p>
+                            <p>
+                                <i class="fa fa-question-circle" title="Questions Count"></i> Questions: @Model.QuestionsCount
+                                @if (@Model.QuestionsOrder == OrderType.Random)
+                                {
+                                    <i class="fa fa-random" title="Random Order"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-long-arrow-alt-right" title="Fixed Order"></i>
+                                }
+                            </p>
+                            <p><i class="fas fa-user-graduate" title="Exam Creator"></i> @Model.Creator.FirstName @Model.Creator.LastName </p>
+
+                            <p class="card-text border-top pt-2" style="display: block;">&nbsp;</p>
+                        </div>
+                        <div class="card-footer py-3">
+                            <div class="row mx-1 text-white">
+                                <a class="btn btn-dark col-md-4 mt-5 offset-md-1"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index">Cancel</a>
+                                <a href="#" class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" onclick="TakeExam()">Take</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <input type="hidden" asp-for="@Model.Id" />
+            <input id="examId" type="hidden" asp-for="@Model.Id" value="@Model.Id" />
             @for (int i = 0; i < Model.Questions.Count; i++)
             {
                 <div class="component question" style="display:none;">
@@ -71,10 +86,10 @@
                         </div>
                     </div>
                 </div>
-                    }
-                    <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" style="display:none;">
-                        Submit Quiz
-                    </button>
+            }
+            <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" style="display:none;">
+                Submit Quiz
+            </button>
         </form>
     </div>
 </div>
@@ -94,18 +109,17 @@
         </div>
     </div>
 </div>
-@section Scripts{ 
-<script>
+@section Scripts{
+    <script>
         function TakeExam() {
             $("#informationBox").hide();
             $(".question").show();
+            $("#submit").show();
         }
-</script>
-<script>
-    window.onbeforeunload = function () {
-        $("#refreshConfirmationModal").show();
-    };
-</script>
+        window.onbeforeunload = function () {
+            $("#refreshConfirmationModal").show();
+        };
+    </script>
 }
 
 

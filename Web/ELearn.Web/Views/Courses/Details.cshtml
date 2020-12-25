@@ -2,7 +2,7 @@
 @using ELearn.Services.Data.Exams
 @using ELearn.Services.Data.Results
 
-@model CourseDetailsViewModel
+@model CourseViewModel
 
 @inject IExamsService examsService
 @inject IResultsService resultsService
@@ -24,15 +24,12 @@
                         <br />
                     </div>
 
-                    <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Courses" asp-action="Details">
-                        <div class="input-group form-group flex-grow-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                            <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter exam name..." value="@Model.Keyword">
+                    <div class="input-group form-group flex-grow-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
-                    </form>
+                        <input type="text" class="form-control" id="search" flex-grow-1 mr-2" name="keyword" placeholder="Enter keyword...">
+                    </div>
                 </div>
 
             </div>
@@ -41,7 +38,7 @@
                 {
                     @foreach (var exam in Model.Exams.OrderByDescending(x => x.CreatedOn))
                     {
-                        <div class="col-md-4">
+                        <div class="col-md-4 searchItem">
                             <div class="component">
                                 <div class="card">
                                     <div class="card-body">
@@ -97,49 +94,9 @@
                 }
             </div>
         </div>
-        @if (Model.PagesCount > 1)
-        {
-            var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
-            var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
-            <div class="text-center mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item @disabledLeftArrow">
-                        <a class="page-link"
-                           asp-area=""
-                           asp-controller="Courses"
-                           asp-action="Details"
-                           asp-route-page="@Model.PreviousPage"
-                           asp-route-keyword="@Model.Keyword">
-                            <i class="fas fa-long-arrow-alt-left"></i>
-                        </a>
-                    </li>
-                    @for (int i = 1; i <= Model.PagesCount; i++)
-                    {
-                        var active = i == Model.CurrentPage ? "active" : string.Empty;
-                        <li class="page-item @active">
-                            <a class="page-link"
-                               asp-area=""
-                               asp-controller="Courses"
-                               asp-action="Details"
-                               asp-route-page="@i"
-                               asp-route-keyword="@Model.Keyword">
-                                @i
-                            </a>
-                        </li>
-                    }
-                    <li class="page-item @disabledRightArrow">
-                        <a class="page-link"
-                           asp-area=""
-                           asp-controller="Courses"
-                           asp-action="Details"
-                           asp-route-page="@Model.NextPage"
-                           asp-route-keyword="@Model.Keyword">
-                            <i class="fas fa-long-arrow-alt-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        }
     </div>
 </div>
 <br />
+@section Scripts{
+    <script src="~/js/search.js"></script>
+}

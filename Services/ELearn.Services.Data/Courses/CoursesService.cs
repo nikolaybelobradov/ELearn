@@ -154,26 +154,5 @@
 
             return course;
         }
-
-        public async Task<CourseDetailsViewModel> GetCourseByIdPagedAsync(string courseId, int page, int countPerPage, string keyword = null)
-        {
-            var course = await this.courseRepository.All()
-                .To<CourseDetailsViewModel>()
-                .FirstOrDefaultAsync(x => x.Id == courseId);
-
-            var exams = course.Exams;
-
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                exams = exams.Where(x => x.Name.Contains(keyword));
-            }
-
-            course.Exams = exams
-                .OrderByDescending(x => x.CreatedOn)
-                .Skip(countPerPage * (page - 1))
-                .Take(countPerPage);
-
-            return course;
-        }
     }
 }

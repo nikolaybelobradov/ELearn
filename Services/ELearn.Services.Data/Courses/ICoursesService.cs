@@ -10,8 +10,6 @@
     {
         Task<CourseViewModel> GetCourseByIdAsync(string courseId);
 
-        Task<CourseDetailsViewModel> GetCourseByIdPagedAsync(string courseId, int page, int countPerPage, string keyword = null);
-
         Task CreateCourseAsync<TModel>(TModel model);
 
         Task<IEnumerable<T>> GetAllCoursesAsync<T>(int page, int countPerPage, string keyword = null);
