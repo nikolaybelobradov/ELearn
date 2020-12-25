@@ -14,7 +14,7 @@
 
     public class CoursesController : AdministrationController
     {
-        private const int PerPageDefaultValue = 3;
+        private const int PerPageDefaultValue = 9;
         private readonly ICoursesService coursesService;
         private readonly UserManager<ApplicationUser> userManager;
 
