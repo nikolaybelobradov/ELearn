@@ -1,21 +1,22 @@
 ﻿namespace ELearn.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using ELearn.Data.Models;
-    using ELearn.Services.Data;
-    using ELearn.Services.Data.Administration;
+    using ELearn.Services.Data.Dashboard;
     using ELearn.Web.ViewModels.Administration;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
+
 
     public class DashboardController : AdministrationController
     {
-        private readonly IAdminService adminService;
+        private readonly IDashboardService dashboardService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public DashboardController(IAdminService adminService, UserManager<ApplicationUser> userManager)
+        public DashboardController(IDashboardService dashboardService, UserManager<ApplicationUser> userManager)
         {
-            this.adminService = adminService;
+            this.dashboardService = dashboardService;
             this.userManager = userManager;
         }
 
@@ -25,9 +26,9 @@
 
             this.ViewData["CurrentUser"] = currentUser;
 
-            var exams = await this.adminService.GetLastExamsAsync(currentUser);
-            var results = await this.adminService.GetLastResultsAsync(currentUser);
-            var courses = await this.adminService.GetLastCoursesAsync(currentUser);
+            var exams = await this.dashboardService.GetLastExamsAsync(currentUser);
+            var results = await this.dashboardService.GetLastResultsAsync(currentUser);
+            var courses = await this.dashboardService.GetLastCoursesAsync(currentUser);
 
             var viewModel = new DashboardViewModel()
             {

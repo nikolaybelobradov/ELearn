@@ -1,6 +1,5 @@
 ﻿namespace ELearn.Web
 {
-    using System;
     using System.Reflection;
 
     using AutoMapper;
@@ -13,9 +12,9 @@
     using ELearn.Data.Seeding;
     using ELearn.Services;
     using ELearn.Services.Data;
-    using ELearn.Services.Data.Administration;
     using ELearn.Services.Data.Choices;
     using ELearn.Services.Data.Courses;
+    using ELearn.Services.Data.Dashboard;
     using ELearn.Services.Data.Exams;
     using ELearn.Services.Data.Questions;
     using ELearn.Services.Data.Results;
@@ -75,7 +74,7 @@
             services.AddAutoMapper(typeof(ELearnProfile));
 
             // Application services
-            services.AddTransient<IAdminService, AdminService>();
+            services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ICoursesService, CoursesService>();
             services.AddTransient<IExamsService, ExamsService>();

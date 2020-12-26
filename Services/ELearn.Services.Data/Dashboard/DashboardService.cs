@@ -1,4 +1,4 @@
-﻿namespace ELearn.Services.Data.Administration
+﻿namespace ELearn.Services.Data.Dashboard
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -10,13 +10,13 @@
     using ELearn.Web.ViewModels.Courses;
     using Microsoft.EntityFrameworkCore;
 
-    public class AdminService : IAdminService
+    public class DashboardService : IDashboardService
     {
         private readonly IDeletableEntityRepository<Exam> examRepository;
         private readonly IDeletableEntityRepository<Result> resultRepository;
         private readonly IDeletableEntityRepository<Course> courseRepository;
 
-        public AdminService(
+        public DashboardService(
             IDeletableEntityRepository<Exam> examRepository,
             IDeletableEntityRepository<Result> resultRepository,
             IDeletableEntityRepository<Course> courseRepository)

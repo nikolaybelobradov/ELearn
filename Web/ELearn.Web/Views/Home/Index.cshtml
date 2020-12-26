@@ -1,11 +1,18 @@
 ﻿@using ELearn.Common
 @using ELearn.Data.Models
+@using ELearn.Web.ViewModels.Home
 @using Microsoft.AspNetCore.Identity
+
+@model HomePageViewModel
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @{
     this.ViewData["Title"] = "Home Page";
+    var i = 1;
+    var j = 1;
+    var k = 1;
 }
 @if (!this.SignInManager.IsSignedIn(this.User))
 {
@@ -21,7 +28,124 @@
             </div>
         </div>
     </div>
-}else{
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-4 offset-md-1">
+                <div class="mb-5">
+                    <h2><i class="far fa-list-alt"></i> Last Exams</h2>
+                    <p>The last 10 exams from courses you have joined</p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Creator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var exam in Model.LastExams)
+                            {
+                                <tr onclick="location.href = '@(Url.Action("Details", "Exams", new { id = exam.Id }))'" style="cursor: pointer;">
+                                    <td>@j</td>
+                                    <td>@exam.Name</td>
+                                    <td>@exam.Creator.FirstName @exam.Creator.LastName</td>
+                                </tr>
 
+                                j++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 offset-md-1">
+                <div class="mb-5">
+                    <h2><i class="fas fa-poll"></i> Last Results</h2>
+                    <p>The last 10 results of exams you have created</p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">User Email</th>
+                                <th scope="col">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var result in Model.LastResults)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@result.User.Email</td>
+                                    <td>@result.Points</td>
+                                </tr>
+
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9 offset-md-1">
+                <div class="mb-5">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Last Courses</h2>
+                    <p>The last 10 courses</p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Participants</th>
+                                <th scope="col">Exams</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var course in Model.LastCourses)
+                            {
+                                <tr>
+                                    <td>@k</td>
+                                    <td>@course.Name</td>
+                                    <td>@course.Users.Count</td>
+                                    <td>@course.Exams.Count</td>
+                                    <td>
+                                        @if (course.Users.Contains(ViewData["CurrentUser"]))
+                                        {
+                                            <a asp-area=""
+                                               asp-controller="Courses"
+                                               asp-action="Details"
+                                               asp-route-id="@course.Id"
+                                               class="btn btn-primary">Details</a>
+
+                                            <a asp-area=""
+                                               asp-controller="Courses"
+                                               asp-action="Exit"
+                                               asp-route-id="@course.Id"
+                                               class="btn btn-dark">Exit</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-area=""
+                                               asp-controller="Courses"
+                                               asp-action="Join"
+                                               asp-route-id="@course.Id"
+                                               class="btn btn-primary">Join</a>
+                                        }
+                                    </td>
+                                </tr>
+
+                                k++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 }
 

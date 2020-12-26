@@ -23,6 +23,15 @@
             this.userManager = userManager;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            var exams = await this.examsService.GetMyExamsAsync(user.Id);
+
+            return this.View(exams);
+        }
+
         public async Task<IActionResult> Create()
         {
             var user = await this.userManager.GetUserAsync(this.HttpContext.User);
@@ -99,15 +108,6 @@
             await this.examsService.EditExamAsync(viewModel);
 
             return this.RedirectToAction("Details", "Exams", new { id = viewModel.Id });
-        }
-
-        public async Task<IActionResult> My()
-        {
-            var user = await this.userManager.GetUserAsync(this.HttpContext.User);
-
-            var exams = await this.examsService.GetMyExamsAsync(user.Id);
-
-            return this.View(exams);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ELearn.Services.Data.Administration
+﻿namespace ELearn.Services.Data.Dashboard
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -6,7 +6,7 @@
     using ELearn.Data.Models;
     using ELearn.Web.ViewModels.Courses;
 
-    public interface IAdminService
+    public interface IDashboardService
     {
         Task<ICollection<Result>> GetLastResultsAsync(ApplicationUser user);
 

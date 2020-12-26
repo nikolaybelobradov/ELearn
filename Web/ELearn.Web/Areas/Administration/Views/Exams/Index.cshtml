@@ -1,7 +1,80 @@
-﻿
+﻿@model ICollection<ExamViewModel>
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My exams";
+    var j = 1;
 }
 
-<h1>Index</h1>
+<div class="container">
 
+    <div class="section">
+
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="page-header">
+                    <h2>@ViewData["Title"]</h2>
+                    <br />
+                </div>
+                <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Results" asp-action="Index">
+                    <div class="input-group form-group flex-grow-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control flex-grow-1 mr-2" id="search" name="keyword" placeholder="Enter keyword...">
+                    </div>
+                </form>
+                <div class="component">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Questions Count</th>
+                                <th scope="col">Questions Order</th>
+                                <th scope="col">Choices Order</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() > 0)
+                            {
+                                @foreach (var exam in Model)
+                                {
+                                    <tr class="table-light searchItem">
+                                        <td>@j</td>
+                                        <td>@exam.Name</td>
+                                        <td>@exam.QuestionsCount</td>
+                                        <td>@exam.QuestionsOrder</td>
+                                        <td>@exam.ChoicesOrder</td>
+                                        <td>@exam.CreatedOn.ToString("MM.dd.yyyy")</td>
+                                        <td>
+                                            <a class="btn btn-info"
+                                               asp-area="Administration"
+                                               asp-controller="Exams"
+                                               asp-action="Details"
+                                               asp-route-id="@exam.Id">
+                                                <i class="fas fa-info"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    j++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">No exams</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    <script src="~/js/search.js"></script>
+}
