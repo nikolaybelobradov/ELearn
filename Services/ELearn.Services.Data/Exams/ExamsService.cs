@@ -206,5 +206,17 @@
                 throw new ArgumentException("You do not have permission to perform this action. Please contact an administrator.");
             }
         }
+
+        public async Task<ICollection<ExamViewModel>> GetMyExamsAsync(string userId)
+        {
+            var exams = await this.examRepository
+                .All()
+                .Where(x => x.CreatorId == userId)
+                .OrderByDescending(x => x.CreatedOn)
+                .To<ExamViewModel>()
+                .ToListAsync();
+
+            return exams;
+        }
     }
 }

@@ -17,16 +17,13 @@
         private const int PerPageDefaultValue = 10;
         private readonly IUsersService usersService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<ApplicationRole> roleManager;
 
         public UsersController(
             IUsersService usersService,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            UserManager<ApplicationUser> userManager)
         {
             this.usersService = usersService;
             this.userManager = userManager;
-            this.roleManager = roleManager;
         }
 
         [HttpGet]

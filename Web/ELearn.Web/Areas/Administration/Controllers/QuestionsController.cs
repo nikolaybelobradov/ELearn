@@ -16,20 +16,17 @@
         private readonly IChoicesService choicesService;
         private readonly IQuestionsService questionsService;
         private readonly IExamsService examsService;
-        private readonly ICoursesService coursesService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public QuestionsController(
             IChoicesService choicesService,
             IQuestionsService questionsService,
             IExamsService examsService,
-            ICoursesService coursesService,
             UserManager<ApplicationUser> userManager)
         {
             this.choicesService = choicesService;
             this.questionsService = questionsService;
             this.examsService = examsService;
-            this.coursesService = coursesService;
             this.userManager = userManager;
         }
 

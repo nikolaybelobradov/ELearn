@@ -1,7 +1,7 @@
-﻿@model ResultsViewModel
+﻿@model ICollection<ExamViewModel>
 
 @{
-    ViewData["Title"] = "My results";
+    ViewData["Title"] = "My exams";
     var j = 1;
 }
 
@@ -15,15 +15,15 @@
                     <h2>@ViewData["Title"]</h2>
                     <br />
                 </div>
-                    <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Results" asp-action="Index">
-                        <div class="input-group form-group flex-grow-1">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            </div>
-                            <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter exam name..." value="@Model.Keyword">
+                <form method="get" class="form-inline mb-3" asp-area="" asp-controller="Results" asp-action="Index">
+                    <div class="input-group form-group flex-grow-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
-                    </form>
+                        <input type="text" class="form-control flex-grow-1 mr-2" name="keyword" placeholder="Enter exam name...">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                </form>
                 <div class="component">
                     <table class="table table-hover">
                         <thead>
@@ -35,21 +35,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Results.Count() > 0)
+                            @if (Model.Count() > 0)
                             {
-                                @foreach (var result in Model.Results)
+                                @foreach (var exam in Model)
                                 {
                                     <tr class="table-light">
                                         <td>@j</td>
-                                        <td>@result.Exam.Name</td>
-                                        <td>@result.CreatedOn.ToString("MM.dd.yyyy")</td>
-                                        <td>@result.Points %</td>
+                                        <td>@exam.Name</td>
+                                        <td>@exam.CreatedOn.ToString("MM.dd.yyyy")</td>
+                                        <td>@exam.QuestionsOrder</td>
                                     </tr>
                                     j++;
                                 }
-                            }else{
+                            }
+                            else
+                            {
                                 <tr>
-                                    <td colspan="4" style="text-align: center;">No results</td>
+                                    <td colspan="4" style="text-align: center;">No exams</td>
                                 </tr>
                             }
                         </tbody>

@@ -10,6 +10,8 @@
     {
         Task<ExamViewModel> GetExamByIdAsync(string examId);
 
+        Task<ICollection<ExamViewModel>> GetMyExamsAsync(string userId);
+
         Task CreateExamAsync<TModel>(TModel model);
 
         Task<ExamViewModel> PrepareExamAsync(string examId);

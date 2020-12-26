@@ -101,17 +101,13 @@
             return this.RedirectToAction("Details", "Exams", new { id = viewModel.Id });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> My()
         {
-            var exam = await this.examsService.GetExamByIdAsync(id);
             var user = await this.userManager.GetUserAsync(this.HttpContext.User);
 
-            await this.examsService.CheckForPermissions(exam, user);
+            var exams = await this.examsService.GetMyExamsAsync(user.Id);
 
-            await this.examsService.DeleteExamAsync(id);
-
-            return this.RedirectToAction("Details", "Courses", new { id = exam.Course.Id });
+            return this.View(exams);
         }
     }
 }
