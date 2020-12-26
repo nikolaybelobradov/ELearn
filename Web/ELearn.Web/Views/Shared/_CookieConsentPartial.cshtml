@@ -10,15 +10,13 @@
 {
     <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
         We use cookies to understand how you use our site and to improve your experience. <a asp-area="" asp-controller="Home" asp-action="Privacy">Learn More</a>.
-        <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
-            <span aria-hidden="true">Accept</span>
-        </button>
+        <a style="position: absolute; top: 0; right: 0; padding:0.75rem 1.25rem; cursor: pointer;" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">Accept</a>
     </div>
     <script>
         (function () {
-            var button = document.querySelector("#cookieConsent button[data-cookie-string]");
-            button.addEventListener("click", function () {
-                document.cookie = button.dataset.cookieString;
+            var link = document.querySelector("#cookieConsent a[data-cookie-string]");
+            link.addEventListener("click", function () {
+                document.cookie = link.dataset.cookieString;
             }, false);
         })();
     </script>

@@ -59,7 +59,7 @@
 
             await this.examsService.CreateExamAsync(viewModel);
 
-            return this.RedirectToAction("My");
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

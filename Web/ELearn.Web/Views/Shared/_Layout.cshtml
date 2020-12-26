@@ -18,7 +18,9 @@
 <body class="index">
 
     <partial name="_MainNavPartial" />
+    <div class="container">
     <partial name="_CookieConsentPartial" />
+        </div>
 
     @this.RenderBody()
 
@@ -28,7 +30,7 @@
                 <div class="links">
                     <ul class="footer-menu list-unstyled d-flex flex-row text-center text-md-left">
                         <li><a href="#" target="_blank">About Us</a></li>
-                        <li><a href="#" target="_blank">Privacy</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                     </ul>
                 </div>
                 <div class="social mt-4 mt-md-0">
