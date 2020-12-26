@@ -5,7 +5,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#lazy"><img src="~/img/logo.png" alt="ELearn Logo" class="mr-2" height="30">ELearn</a>
+        <a class="navbar-brand d-flex align-items-center" href="~/"><img src="~/img/logo.png" alt="ELearn Logo" class="mr-2" height="30">ELearn</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-5" aria-controls="navbarNavDropdown-5"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -35,7 +35,7 @@
                             <span><b>@FullName</b></span>
                             <a class="dropdown-item" asp-area="" asp-controller="Courses" asp-action="My"><i class="fas fa-chalkboard-teacher"></i> My courses</a>
                             <a class="dropdown-item" asp-area="" asp-controller="Results" asp-action="Index"><i class="fas fa-poll"></i> My results</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-edit"></i> Edit</a>
                         </div>
                     </li>
                     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.LecturerRoleName))

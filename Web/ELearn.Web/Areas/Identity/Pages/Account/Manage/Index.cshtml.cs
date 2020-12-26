@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using ELearn.Data.Models;
+using ELearn.Services.Data.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,13 +15,17 @@ namespace ELearn.Web.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUsersService usersService;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IUsersService usersService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this.usersService = usersService;
+
         }
 
         public string Username { get; set; }
@@ -33,21 +38,30 @@ namespace ELearn.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Middle Name")]
+            public string MiddleName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var firstName = await usersService.GetFirstNameAsync(user);
+            var middleName = await usersService.GetMiddleNameAsync(user);
+            var lastName = await usersService.GetLastNameAsync(user);
 
-            Username = userName;
+            this.Username = userName;
 
-            Input = new InputModel
+            this.Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                FirstName = firstName,
+                MiddleName = middleName,
+                LastName = lastName,
             };
         }
 
@@ -77,20 +91,42 @@ namespace ELearn.Web.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var firstName = await this.usersService.GetFirstNameAsync(user);
+            if (this.Input.FirstName != firstName)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var setFirstNameResult = await this.usersService.SetFirstNameAsync(user, this.Input.FirstName);
+                if (!setFirstNameResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    this.StatusMessage = "Unexpected error when trying to set first name.";
+                    return this.RedirectToPage();
                 }
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+            var middleName = await this.usersService.GetMiddleNameAsync(user);
+            if (this.Input.MiddleName != middleName)
+            {
+                var setMiddleNameResult = await this.usersService.SetMiddleNameAsync(user, this.Input.MiddleName);
+                if (!setMiddleNameResult.Succeeded)
+                {
+                    this.StatusMessage = "Unexpected error when trying to set middle name.";
+                    return this.RedirectToPage();
+                }
+            }
+
+            var lastName = await this.usersService.GetLastNameAsync(user);
+            if (this.Input.LastName != lastName)
+            {
+                var setLastNameResult = await this.usersService.SetLastNameAsync(user, this.Input.LastName);
+                if (!setLastNameResult.Succeeded)
+                {
+                    this.StatusMessage = "Unexpected error when trying to set last name.";
+                    return this.RedirectToPage();
+                }
+            }
+
+            await this._signInManager.RefreshSignInAsync(user);
+            this.StatusMessage = "Your profile has been updated";
+            return this.RedirectToPage();
         }
     }
 }

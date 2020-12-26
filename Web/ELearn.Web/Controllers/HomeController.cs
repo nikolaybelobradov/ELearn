@@ -2,6 +2,7 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+
     using ELearn.Data.Models;
     using ELearn.Services.Data.Dashboard;
     using ELearn.Web.ViewModels;
@@ -14,30 +15,34 @@
     {
         private readonly IDashboardService dashboardService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public HomeController(IDashboardService dashboardService, UserManager<ApplicationUser> userManager)
+        public HomeController(IDashboardService dashboardService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.dashboardService = dashboardService;
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+            var viewModel = new HomePageViewModel();
 
-            this.ViewData["CurrentUser"] = currentUser;
-
-            var exams = await this.dashboardService.GetLastExamsAsync(currentUser);
-            var results = await this.dashboardService.GetLastResultsAsync(currentUser);
-            var courses = await this.dashboardService.GetLastCoursesAsync(currentUser);
-
-            var viewModel = new HomePageViewModel()
+            if (this.signInManager.IsSignedIn(this.User))
             {
-                LastExams = exams,
-                LastResults = results,
-                LastCourses = courses,
-            };
+                var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+                this.ViewData["CurrentUser"] = currentUser;
+
+                var exams = await this.dashboardService.GetLastExamsAsync(currentUser);
+                var results = await this.dashboardService.GetLastResultsAsync(currentUser);
+                var courses = await this.dashboardService.GetLastCoursesAsync(currentUser);
+
+                viewModel.LastExams = exams;
+                viewModel.LastResults = results;
+                viewModel.LastCourses = courses;
+            }
 
             return this.View(viewModel);
         }

@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Services.Data.Users
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -117,6 +118,89 @@
 
             this.userRepository.Delete(user);
             await this.userRepository.SaveChangesAsync();
+        }
+
+        public async Task<string> GetFirstNameAsync(ApplicationUser user)
+        {
+            var currentUser = await this.userRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            return currentUser.FirstName;
+        }
+
+        public async Task<string> GetMiddleNameAsync(ApplicationUser user)
+        {
+            var currentUser = await this.userRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            return currentUser.MiddleName;
+        }
+
+        public async Task<string> GetLastNameAsync(ApplicationUser user)
+        {
+            var currentUser = await this.userRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            return currentUser.LastName;
+        }
+
+        public async Task<IdentityResult> SetFirstNameAsync(ApplicationUser user, string firstName)
+        {
+            try
+            {
+                var currentUser = await this.userRepository.All()
+                    .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+                currentUser.FirstName = firstName;
+
+                this.userRepository.Update(currentUser);
+                await this.userRepository.SaveChangesAsync();
+
+                return IdentityResult.Success;
+            }
+            catch (Exception e)
+            {
+                return IdentityResult.Failed();
+            }
+        }
+
+        public async Task<IdentityResult> SetMiddleNameAsync(ApplicationUser user, string middleName)
+        {
+            try
+            {
+                var currentUser = await this.userRepository.All()
+                    .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+                currentUser.MiddleName = middleName;
+
+                this.userRepository.Update(currentUser);
+                await this.userRepository.SaveChangesAsync();
+
+                return IdentityResult.Success;
+            }
+            catch (Exception e)
+            {
+                return IdentityResult.Failed();
+            }
+        }
+
+        public async Task<IdentityResult> SetLastNameAsync(ApplicationUser user, string lastName)
+        {
+            try
+            {
+                var currentUser = await this.userRepository.All()
+                    .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+                currentUser.LastName = lastName;
+
+                this.userRepository.Update(currentUser);
+                await this.userRepository.SaveChangesAsync();
+
+                return IdentityResult.Success;
+            }catch (Exception e)
+            {
+                return IdentityResult.Failed();
+            }
         }
     }
 }
