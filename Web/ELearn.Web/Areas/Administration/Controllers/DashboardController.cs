@@ -26,9 +26,9 @@
 
             this.ViewData["CurrentUser"] = currentUser;
 
-            var exams = await this.dashboardService.GetLastExamsAsync(currentUser);
-            var results = await this.dashboardService.GetLastResultsAsync(currentUser);
-            var courses = await this.dashboardService.GetLastCoursesAsync(currentUser);
+            var exams = await this.dashboardService.GetLastExamsAsync(currentUser, 10);
+            var results = await this.dashboardService.GetLastResultsAsync(currentUser, 10);
+            var courses = await this.dashboardService.GetLastCoursesAsync(currentUser, 10);
 
             var viewModel = new DashboardViewModel()
             {

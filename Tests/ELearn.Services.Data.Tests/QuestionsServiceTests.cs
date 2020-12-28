@@ -78,12 +78,22 @@
         [Fact]
         public async Task GetQuestionByIdAsyncShouldWorkCorrectly()
         {
-            var question = await this.CreateQuestionAsync();
-
             AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
-            var result = await this.Service.GetQuestionByIdAsync(question.Id);
+            
+            var examId = Guid.NewGuid().ToString();
+            var createQuestionViewModel = new CreateQuestionViewModel
+            {
+                Text = "question",
+                IsActive = true,
+                ExamId = examId,
+            };
 
-            Assert.Equal(question.Id, result.Id);
+            await this.Service.CreateQuestionAsync(createQuestionViewModel);
+
+            var question = await this.DbContext.Questions.FirstOrDefaultAsync();
+
+            var result = await this.Service.GetQuestionByIdAsync(question.Id);
+            var ss = 0;
             Assert.Equal(question.Text, result.Text);
             Assert.Equal(question.IsActive, result.IsActive);
             Assert.Equal(question.ExamId, result.ExamId);

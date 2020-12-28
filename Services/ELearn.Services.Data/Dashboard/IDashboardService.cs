@@ -8,10 +8,10 @@
 
     public interface IDashboardService
     {
-        Task<ICollection<Result>> GetLastResultsAsync(ApplicationUser user);
+        Task<ICollection<Result>> GetLastResultsAsync(ApplicationUser user, int count);
 
-        Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user);
+        Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user, int count);
 
-        Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user);
+        Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user, int count);
     }
 }

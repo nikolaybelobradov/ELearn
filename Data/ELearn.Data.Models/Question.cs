@@ -12,7 +12,7 @@
         public Question()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Choices = new HashSet<Choice>();
+            this.Choices = new List<Choice>();
         }
 
         [Required]
@@ -27,6 +27,6 @@
         [ForeignKey(nameof(ExamId))]
         public virtual Exam Exam { get; set; }
 
-        public virtual ICollection<Choice> Choices { get; set; }
+        public virtual IList<Choice> Choices { get; set; }
     }
 }

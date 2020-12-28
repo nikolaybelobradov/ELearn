@@ -26,36 +26,36 @@
             this.courseRepository = courseRepository;
         }
 
-        public async Task<ICollection<Result>> GetLastResultsAsync(ApplicationUser user)
+        public async Task<ICollection<Result>> GetLastResultsAsync(ApplicationUser user, int count)
         {
             var results = await this.resultRepository
                 .All()
                 .Where(x => x.Exam.CreatorId == user.Id)
                 .OrderByDescending(x => x.CreatedOn)
-                .Take(10)
+                .Take(count)
                 .ToListAsync();
 
             return results;
         }
 
-        public async Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user)
+        public async Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user, int count)
         {
             var exams = await this.examRepository
                 .All()
                 .Where(x => x.Course.Users.Contains(user))
                 .OrderByDescending(x => x.CreatedOn)
-                .Take(10)
+                .Take(count)
                 .ToListAsync();
 
             return exams;
         }
 
-        public async Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user)
+        public async Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user, int count)
         {
             var courses = await this.courseRepository
                 .All()
                 .OrderByDescending(x => x.CreatedOn)
-                .Take(10)
+                .Take(count)
                 .To<CourseViewModel>()
                 .ToListAsync();
 

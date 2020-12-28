@@ -13,7 +13,7 @@
         public Exam()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Questions = new HashSet<Question>();
+            this.Questions = new List<Question>();
             this.Results = new HashSet<Result>();
         }
 
@@ -45,7 +45,7 @@
         [ForeignKey(nameof(CourseId))]
         public virtual Course Course { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public virtual IList<Question> Questions { get; set; }
 
         public virtual ICollection<Result> Results { get; set; }
     }

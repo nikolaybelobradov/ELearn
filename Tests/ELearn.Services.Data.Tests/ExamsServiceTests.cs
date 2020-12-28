@@ -204,12 +204,19 @@ namespace ELearn.Services.Data.Tests
         public async Task CheckIfPrepareExamWorkCorrectly()
         {
             var exam = await this.CreateExamAsync();
-            exam = await this.AddQuestionsToExamAsync(exam);
+            exam = await this.AddQuestionsToExamAsync(exam.Id);
             var preparedExam = await this.Service.PrepareExamAsync(exam.Id);
 
-            var questions = await exam.Questions.AsQueryable().To<QuestionViewModel>().ToListAsync();
+            AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
+
             Assert.Equal(exam.Id, preparedExam.Id);
-            Assert.Equal(questions, preparedExam.Questions);
+            Assert.Equal(exam.Questions.First().Id, preparedExam.Questions.First().Id);
+            Assert.Equal(exam.Questions.Last().Id, preparedExam.Questions.Last().Id);
+            Assert.Equal(exam.Questions.First().Choices.First().Id, preparedExam.Questions.First().Choices.First().Id);
+            Assert.Equal(exam.Questions.First().Choices.Last().Id, preparedExam.Questions.First().Choices.Last().Id);
+            Assert.Equal(exam.Questions.Last().Choices.First().Id, preparedExam.Questions.Last().Choices.First().Id);
+            Assert.Equal(exam.Questions.Last().Choices.Last().Id, preparedExam.Questions.Last().Choices.Last().Id);
+
         }
 
         [Fact]
@@ -263,10 +270,12 @@ namespace ELearn.Services.Data.Tests
             return exam;
         }
 
-        private async Task<Exam> AddQuestionsToExamAsync(Exam exam)
+        private async Task<Exam> AddQuestionsToExamAsync(string examId)
         {
-            var choicesList1 = new HashSet<Choice>();
-            var choicesList2 = new HashSet<Choice>();
+            var exam = await this.DbContext.Exams.FirstOrDefaultAsync(x => x.Id == examId);
+
+            var choicesList1 = new List<Choice>();
+            var choicesList2 = new List<Choice>();
             choicesList1.Add(
                 new Choice
                 {
@@ -296,7 +305,7 @@ namespace ELearn.Services.Data.Tests
                     IsTrue = false,
                 });
 
-            var questions = new HashSet<Question>();
+            var questions = new List<Question>();
             questions.Add(
                 new Question
                 {
@@ -338,7 +347,6 @@ namespace ELearn.Services.Data.Tests
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Result>(result).State = EntityState.Detached;
         }
-
         private async Task<Exam> GetExamAsync(string id)
         {
             var exam = await this.DbContext.Exams.FirstOrDefaultAsync(x => x.Id == id);
