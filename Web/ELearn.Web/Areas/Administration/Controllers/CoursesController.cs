@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using ELearn.Common;
     using ELearn.Data.Models;
     using ELearn.Services.Data.Courses;
     using ELearn.Web.ViewModels.Courses;
@@ -55,7 +56,7 @@
         {
             var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
-            await this.coursesService.ExitCourseAsync(currentUser, id);
+            await this.coursesService.RemoveUserFromCourseAsync(id, currentUser.Id);
 
             return this.RedirectToAction("My");
         }
@@ -102,6 +103,56 @@
             var course = await this.coursesService.GetCourseByIdAsync(id);
 
             return this.View(course);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var course = await this.coursesService.GetCourseByIdAsync(id);
+
+            if (!this.User.IsInRole(GlobalConstants.LecturerRoleName) && !this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                throw new ArgumentException("You can edit course only if you are an administrator or lecturer.");
+            }
+
+            var viewModel = new EditCourseViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditCourseViewModel viewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(viewModel);
+            }
+
+            await this.coursesService.EditCourseAsync(viewModel);
+
+            return this.RedirectToAction("Details", "Courses", new { id = viewModel.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.coursesService.DeleteCourseAsync(id);
+
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveUser(string courseId, string userId)
+        {
+            await this.coursesService.RemoveUserFromCourseAsync(courseId, userId);
+
+            return this.RedirectToAction("Details", "Courses", new { id = courseId });
+
         }
     }
 }

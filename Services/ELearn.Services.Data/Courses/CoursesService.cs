@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Services.Data.Courses
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -113,27 +114,6 @@
             await this.courseRepository.SaveChangesAsync();
         }
 
-        public async Task ExitCourseAsync(ApplicationUser currentUser, string courseId)
-        {
-            var course = await this.courseRepository.All()
-                .To<CourseViewModel>().FirstOrDefaultAsync(x => x.Id == courseId);
-            var course2 = await this.courseRepository.All()
-            .FirstOrDefaultAsync(x => x.Id == courseId);
-
-            course2.Users = course.Users;
-
-            var itemToRemove = course.Users.FirstOrDefault(x => x.Id == currentUser.Id);
-            var asd = 0;
-
-            if (course2.Users.Contains(itemToRemove))
-            {
-                course2.Users.Remove(itemToRemove);
-            }
-
-            this.courseRepository.Update(course2);
-            await this.courseRepository.SaveChangesAsync();
-        }
-
         public async Task<ICollection<T>> GetMyCoursesWithoutPagesAsync<T>(ApplicationUser currentUser)
         {
             var courses = await this.courseRepository
@@ -153,6 +133,45 @@
                 .FirstOrDefaultAsync(x => x.Id == courseId);
 
             return course;
+        }
+
+        public async Task EditCourseAsync(EditCourseViewModel model)
+        {
+            var course = await this.courseRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            if (course == null)
+            {
+                throw new ArgumentException("There is no course with this id.");
+            }
+
+            course.Name = model.Name;
+            course.Description = model.Description;
+
+            this.courseRepository.Update(course);
+            await this.courseRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteCourseAsync(string courseId)
+        {
+            var course = await this.courseRepository.All().Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == courseId);
+
+            this.courseRepository.Delete(course);
+            await this.courseRepository.SaveChangesAsync();
+        }
+
+        public async Task RemoveUserFromCourseAsync(string courseId, string userId)
+        {
+            var course = await this.courseRepository.All().Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == courseId);
+
+            var user = course.Users.FirstOrDefault(x => x.Id == userId);
+
+            course.Users.Remove(user);
+
+            this.courseRepository.Update(course);
+            await this.courseRepository.SaveChangesAsync();
         }
     }
 }

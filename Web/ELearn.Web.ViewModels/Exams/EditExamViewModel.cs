@@ -13,6 +13,7 @@
         public string Name { get; set; }
 
         [Required]
+        [MinLength(20)]
         public string Description { get; set; }
 
         [Required]

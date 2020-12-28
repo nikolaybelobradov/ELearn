@@ -133,6 +133,11 @@
             var exam = await this.examRepository.All()
                 .FirstOrDefaultAsync(x => x.Id == model.Id);
 
+            if (exam == null)
+            {
+                throw new ArgumentException("There is no exam with this id.");
+            }
+
             exam.Name = model.Name;
             exam.Description = model.Description;
             exam.QuestionsCount = model.QuestionsCount;

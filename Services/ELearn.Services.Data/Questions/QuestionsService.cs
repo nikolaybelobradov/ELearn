@@ -34,6 +34,11 @@
             var question = await this.questionRepository.All()
                 .FirstOrDefaultAsync(x => x.Id == model.Id);
 
+            if (question == null)
+            {
+                throw new ArgumentException("There is no question with this id.");
+            }
+
             question.Text = model.Text;
             question.IsActive = model.IsActive;
 

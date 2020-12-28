@@ -1,5 +1,6 @@
 ﻿namespace ELearn.Services.Data.Choices
 {
+    using System;
     using System.Threading.Tasks;
 
     using AutoMapper;
@@ -32,6 +33,11 @@
         {
             var choice = await this.choiceRepository.All()
                 .FirstOrDefaultAsync(x => x.Id == model.Id);
+
+            if (choice == null)
+            {
+                throw new ArgumentException("There is no choice with this id.");
+            }
 
             choice.Text = model.Text;
             choice.IsTrue = model.IsTrue;

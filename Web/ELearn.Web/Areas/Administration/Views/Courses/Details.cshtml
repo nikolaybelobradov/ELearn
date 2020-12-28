@@ -10,7 +10,16 @@
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <div class="page-header">
-                    <h2>@ViewData["Title"]</h2>
+                    <h2>
+                        @ViewData["Title"]
+                        <a class="btn btn-warning btn-sm"
+                           asp-area="Administration"
+                           asp-controller="Courses"
+                           asp-action="Edit"
+                           asp-route-id="@Model.Id">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </h2>
                     <p>@Model.Description</p>
                 </div>
 
@@ -93,10 +102,11 @@
                                         <td>@(user.FirstName+" "+user.MiddleName+" "+user.LastName)</td>
                                         <td>
                                             <a class="btn btn-danger"
-                                               asp-action="Delete" ,
-                                               asp-controller="Dashboard"
+                                               asp-action="RemoveUser" ,
+                                               asp-controller="Courses"
                                                asp-area="Administration"
-                                               asp-route-id="@user.Id">
+                                               asp-route-courseId="@Model.Id"
+                                               asp-route-userId="@user.Id">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>

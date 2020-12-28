@@ -38,6 +38,18 @@
             return results;
         }
 
+        public async Task<ICollection<Result>> GetUserLastResultsAsync(ApplicationUser user, int count)
+        {
+            var results = await this.resultRepository
+                .All()
+                .Where(x => x.UserId == user.Id)
+                .OrderByDescending(x => x.CreatedOn)
+                .Take(count)
+                .ToListAsync();
+
+            return results;
+        }
+
         public async Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user, int count)
         {
             var exams = await this.examRepository

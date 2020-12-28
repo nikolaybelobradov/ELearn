@@ -24,6 +24,10 @@
 
         Task JoinCourseAsync(ApplicationUser currentUser, string courseId);
 
-        Task ExitCourseAsync(ApplicationUser currentUser, string courseId);
+        Task EditCourseAsync(EditCourseViewModel model);
+
+        Task DeleteCourseAsync(string courseId);
+
+        Task RemoveUserFromCourseAsync(string courseId, string userId);
     }
 }

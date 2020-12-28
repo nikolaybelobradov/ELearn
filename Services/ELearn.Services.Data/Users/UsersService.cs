@@ -66,6 +66,11 @@
             var user = await this.userRepository.All()
                 .FirstOrDefaultAsync(x => x.Id == model.Id);
 
+            if (user == null)
+            {
+                throw new ArgumentException("There is no user with this id.");
+            }
+
             user.FirstName = model.FirstName;
             user.MiddleName = model.MiddleName;
             user.LastName = model.LastName;

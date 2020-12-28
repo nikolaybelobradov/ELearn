@@ -66,5 +66,25 @@
 
             return this.View(course);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Join(string id)
+        {
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.coursesService.JoinCourseAsync(currentUser, id);
+
+            return this.RedirectToAction("My");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Exit(string id)
+        {
+            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
+
+            await this.coursesService.RemoveUserFromCourseAsync(id, currentUser.Id);
+
+            return this.RedirectToAction("My");
+        }
     }
 }
