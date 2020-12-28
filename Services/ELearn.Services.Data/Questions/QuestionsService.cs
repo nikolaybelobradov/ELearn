@@ -1,23 +1,27 @@
 ﻿namespace ELearn.Services.Data.Questions
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Choices;
     using ELearn.Web.ViewModels.Questions;
     using Microsoft.EntityFrameworkCore;
 
     public class QuestionsService : IQuestionsService
     {
         private readonly IDeletableEntityRepository<Question> questionRepository;
+        private readonly IDeletableEntityRepository<Choice> choiceRepository;
         private readonly IMapper mapper;
 
-        public QuestionsService(IDeletableEntityRepository<Question> questionRepository, IMapper mapper)
+        public QuestionsService(IDeletableEntityRepository<Question> questionRepository, IDeletableEntityRepository<Choice> choiceRepository, IMapper mapper)
         {
             this.questionRepository = questionRepository;
+            this.choiceRepository = choiceRepository;
             this.mapper = mapper;
         }
 
@@ -58,10 +62,25 @@
         public async Task<QuestionViewModel> GetQuestionByIdAsync(string questionId)
         {
             var question = await this.questionRepository.All()
-                .To<QuestionViewModel>()
                 .FirstOrDefaultAsync(x => x.Id == questionId);
 
-            return question;
+            var choices = await this.choiceRepository.All()
+                .Where(x => x.QuestionId == question.Id)
+                .To<ChoiceViewModel>()
+                .ToListAsync();
+
+            var result = new QuestionViewModel
+            {
+                Id = question.Id,
+                Text = question.Text,
+                IsActive = question.IsActive,
+                ExamId = question.ExamId,
+                Exam = question.Exam,
+                Choices = choices,
+                CreatedOn = question.CreatedOn,
+            };
+
+            return result;
         }
     }
 }

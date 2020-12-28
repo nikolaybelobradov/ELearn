@@ -4,10 +4,11 @@
     using System.Threading.Tasks;
 
     using ELearn.Data.Models;
+    using ELearn.Web.ViewModels.Results;
 
     public interface IResultsService
     {
-        Task<IEnumerable<T>> GetUserResultsAsync<T>(ApplicationUser user, int page, int countPerPage, string keyword = null);
+        Task<IEnumerable<ResultViewModel>> GetUserResultsAsync(ApplicationUser user, int page, int countPerPage, string keyword = null);
 
         Task<int> GetUserResultsCountAsync(ApplicationUser user, string keyword = null);
 

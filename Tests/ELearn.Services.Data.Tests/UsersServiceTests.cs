@@ -19,9 +19,18 @@
     {
         private IUsersService Service => this.ServiceProvider.GetRequiredService<IUsersService>();
 
-        [Fact]
-        public async Task EditUserAsyncShouldEditCorrectly()
+        private RoleManager<ApplicationRole> RoleManager => this.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+        [Theory]
+        [InlineData(GlobalConstants.AdministratorRoleName)]
+        [InlineData(GlobalConstants.LecturerRoleName)]
+        [InlineData("None")]
+
+        public async Task EditUserAsyncShouldEditCorrectly(string roleName)
         {
+            await this.RoleManager.CreateAsync(new ApplicationRole(GlobalConstants.AdministratorRoleName));
+            await this.RoleManager.CreateAsync(new ApplicationRole(GlobalConstants.LecturerRoleName));
+
             var newFirstName = "Georgi";
             var newMiddleName = "Ivanov";
             var newLastName = "Dimitrov";
@@ -34,16 +43,25 @@
                 FirstName = newFirstName,
                 MiddleName = newMiddleName,
                 LastName = newLastName,
-                Role = GlobalConstants.AdministratorRoleName,
+                Role = roleName,
             };
 
             await this.Service.EditUserAsync(editUserViewModel);
             var editedUser = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
-
             Assert.Equal(newFirstName, editedUser.FirstName);
             Assert.Equal(newMiddleName, editedUser.MiddleName);
             Assert.Equal(newLastName, editedUser.LastName);
-            Assert.Equal(GlobalConstants.AdministratorRoleName, string.Join(",", editedUser.Roles));
+
+            if (roleName == "None")
+            {
+                Assert.Empty(editedUser.Roles);
+            }
+            else
+            {
+                var role = await this.RoleManager.FindByIdAsync(editedUser.Roles.FirstOrDefault().RoleId);
+
+                Assert.Equal(roleName, role.Name);
+            }
         }
 
         [Fact]
@@ -132,25 +150,25 @@
         [Fact]
         public async Task GetAllUsersShouldReturnAllUsers()
         {
-            var user = await this.CreateUserAsync("mymail@elearn.com", "Petur", "Petrov", "Petkov", null);
-            var user2 = await this.CreateUserAsync("mymail2@elearn.com", "Ivan", "Todorov", "Dimitrov", GlobalConstants.LecturerRoleName);
+            await this.CreateUserAsync("mymail@elearn.com", "Petur", "Petrov", "Petkov", null);
+            var user = await this.CreateUserAsync("mymail2@elearn.com", "Ivan", "Todorov", "Dimitrov", GlobalConstants.LecturerRoleName);
 
             AutoMapperConfig.RegisterMappings(typeof(UserViewModel).GetTypeInfo().Assembly);
             var users = await this.Service.GetAllUsersAsync<UserViewModel>(1, 10);
 
             Assert.Equal(2, users.Count());
-            Assert.Equal(user2.Email, users.First().Email);
-            Assert.Equal(user2.FirstName, users.First().FirstName);
-            Assert.Equal(user2.MiddleName, users.First().MiddleName);
-            Assert.Equal(user2.LastName, users.First().LastName);
+            Assert.Equal(user.Email, users.First().Email);
+            Assert.Equal(user.FirstName, users.First().FirstName);
+            Assert.Equal(user.MiddleName, users.First().MiddleName);
+            Assert.Equal(user.LastName, users.First().LastName);
         }
 
         [Fact]
         public async Task GetAllUsersCountShouldReturnCorrectCountOfAllUsers()
         {
-            var user = await this.CreateUserAsync("mymail@elearn.com", "Petur", "Petrov", "Petkov", null);
+            await this.CreateUserAsync("mymail@elearn.com", "Petur", "Petrov", "Petkov", null);
 
-            var count = await this.Service.GetAllUsersCountAsync();      
+            var count = await this.Service.GetAllUsersCountAsync();
 
             Assert.Equal(1, count);
         }

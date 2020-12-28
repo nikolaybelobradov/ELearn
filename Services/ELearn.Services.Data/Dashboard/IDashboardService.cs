@@ -14,6 +14,6 @@
 
         Task<ICollection<Exam>> GetLastExamsAsync(ApplicationUser user, int count);
 
-        Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user, int count);
+        Task<ICollection<CourseViewModel>> GetLastCoursesAsync(int count);
     }
 }

@@ -28,7 +28,7 @@ namespace ELearn.Web.Controllers
         public async Task<IActionResult> Index(int page = 1, int countPerPage = PerPageDefaultValue, string keyword = null)
         {
             var user = await this.userManager.GetUserAsync(this.HttpContext.User);
-            var results = await this.resultsService.GetUserResultsAsync<ResultViewModel>(user, page, countPerPage, keyword);
+            var results = await this.resultsService.GetUserResultsAsync(user, page, countPerPage, keyword);
 
             var resultsCount = await this.resultsService.GetUserResultsCountAsync(user, keyword);
             var model = new ResultsViewModel()

@@ -9,6 +9,7 @@
     using ELearn.Data.Common.Repositories;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Results;
     using Microsoft.EntityFrameworkCore;
 
     public class ResultsService : IResultsService
@@ -28,7 +29,7 @@
             return result.Points;
         }
 
-        public async Task<IEnumerable<T>> GetUserResultsAsync<T>(ApplicationUser user, int page, int countPerPage, string keyword = null)
+        public async Task<IEnumerable<ResultViewModel>> GetUserResultsAsync(ApplicationUser user, int page, int countPerPage, string keyword = null)
         {
             var results = this.resultRepository
                 .All()
@@ -43,7 +44,7 @@
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(countPerPage * (page - 1))
                 .Take(countPerPage)
-                .To<T>()
+                .To<ResultViewModel>()
                 .ToListAsync();
 
             return result;

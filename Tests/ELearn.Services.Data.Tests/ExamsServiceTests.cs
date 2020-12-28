@@ -106,23 +106,6 @@ namespace ELearn.Services.Data.Tests
         }
 
         [Fact]
-        public async Task GetExamByIdAsyncShouldWorkCorrectly()
-        {
-            var exam = await this.CreateExamAsync();
-
-            AutoMapperConfig.RegisterMappings(typeof(ExamViewModel).GetTypeInfo().Assembly);
-            var result = await this.Service.GetExamByIdAsync(exam.Id);
-
-            Assert.Equal(exam.Name, result.Name);
-            Assert.Equal(exam.Description, result.Description);
-            Assert.Equal(exam.QuestionsCount, result.QuestionsCount);
-            Assert.Equal(exam.QuestionsOrder, result.QuestionsOrder);
-            Assert.Equal(exam.ChoicesOrder, result.ChoicesOrder);
-            Assert.Equal(exam.CreatorId, result.Creator.Id);
-            Assert.Equal(exam.CourseId, result.Course.Id);
-        }
-
-        [Fact]
         public async Task CheckIfForResultAsyncWorkCorrectly()
         {
             var userId = Guid.NewGuid().ToString();
@@ -149,26 +132,26 @@ namespace ELearn.Services.Data.Tests
                 Id = Guid.NewGuid().ToString(),
             };
 
-            var choices = new List<ChoiceViewModel>();
-            choices.Add(
+            var choices = new List<ChoiceViewModel>
+            {
                 new ChoiceViewModel
                 {
                     Id = Guid.NewGuid().ToString(),
                     Text = "choice1",
                     IsTrue = true,
                     IsSelected = true,
-                });
-            choices.Add(
+                },
                 new ChoiceViewModel
                 {
                     Id = Guid.NewGuid().ToString(),
                     Text = "choice2",
                     IsTrue = false,
                     IsSelected = false,
-                });
+                }
+            };
 
-            var questions = new List<QuestionViewModel>();
-            questions.Add(
+            var questions = new List<QuestionViewModel>
+            {
                 new QuestionViewModel
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -176,7 +159,8 @@ namespace ELearn.Services.Data.Tests
                     IsActive = true,
                     ExamId = examId,
                     Choices = choices,
-                });
+                }
+            };
 
             var examViewModel = new ExamViewModel
             {
@@ -198,25 +182,6 @@ namespace ELearn.Services.Data.Tests
 
             Assert.Equal("You can take an exam only one time!", exception.Message);
             Assert.Equal(1, resultsCount);
-        }
-
-        [Fact]
-        public async Task CheckIfPrepareExamWorkCorrectly()
-        {
-            var exam = await this.CreateExamAsync();
-            exam = await this.AddQuestionsToExamAsync(exam.Id);
-            var preparedExam = await this.Service.PrepareExamAsync(exam.Id);
-
-            AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
-
-            Assert.Equal(exam.Id, preparedExam.Id);
-            Assert.Equal(exam.Questions.First().Id, preparedExam.Questions.First().Id);
-            Assert.Equal(exam.Questions.Last().Id, preparedExam.Questions.Last().Id);
-            Assert.Equal(exam.Questions.First().Choices.First().Id, preparedExam.Questions.First().Choices.First().Id);
-            Assert.Equal(exam.Questions.First().Choices.Last().Id, preparedExam.Questions.First().Choices.Last().Id);
-            Assert.Equal(exam.Questions.Last().Choices.First().Id, preparedExam.Questions.Last().Choices.First().Id);
-            Assert.Equal(exam.Questions.Last().Choices.Last().Id, preparedExam.Questions.Last().Choices.Last().Id);
-
         }
 
         [Fact]
@@ -305,8 +270,8 @@ namespace ELearn.Services.Data.Tests
                     IsTrue = false,
                 });
 
-            var questions = new List<Question>();
-            questions.Add(
+            var questions = new List<Question>
+            {
                 new Question
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -314,8 +279,7 @@ namespace ELearn.Services.Data.Tests
                     IsActive = true,
                     ExamId = exam.Id,
                     Choices = choicesList1,
-                });
-            questions.Add(
+                },
                 new Question
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -323,7 +287,8 @@ namespace ELearn.Services.Data.Tests
                     IsActive = true,
                     ExamId = exam.Id,
                     Choices = choicesList2,
-                });
+                }
+            };
 
             exam.Questions = questions;
 
@@ -346,12 +311,6 @@ namespace ELearn.Services.Data.Tests
             await this.DbContext.Results.AddAsync(result);
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Result>(result).State = EntityState.Detached;
-        }
-        private async Task<Exam> GetExamAsync(string id)
-        {
-            var exam = await this.DbContext.Exams.FirstOrDefaultAsync(x => x.Id == id);
-            this.DbContext.Entry<Exam>(exam).State = EntityState.Detached;
-            return exam;
         }
     }
 }

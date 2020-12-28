@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using AutoMapper;
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
     using ELearn.Web.ViewModels.Choices;

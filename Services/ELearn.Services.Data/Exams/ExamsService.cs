@@ -12,23 +12,27 @@
     using ELearn.Data.Models;
     using ELearn.Services.Mapping;
     using ELearn.Web.ViewModels.Exams;
+    using ELearn.Web.ViewModels.Questions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class ExamsService : IExamsService
     {
         private readonly IDeletableEntityRepository<Exam> examRepository;
+        private readonly IDeletableEntityRepository<Question> questionRepository;
         private readonly IDeletableEntityRepository<Result> resultRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
         public ExamsService(
                 IDeletableEntityRepository<Exam> examRepository,
+                IDeletableEntityRepository<Question> questionRepository,
                 IDeletableEntityRepository<Result> resultRepository,
                 UserManager<ApplicationUser> userManager,
                 IMapper mapper)
         {
             this.examRepository = examRepository;
+            this.questionRepository = questionRepository;
             this.resultRepository = resultRepository;
             this.userManager = userManager;
             this.mapper = mapper;

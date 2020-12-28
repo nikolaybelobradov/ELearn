@@ -74,7 +74,6 @@
             services.AddTransient<IResultsService, ResultsService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IChoicesService, ChoicesService>();
-            services.AddTransient<ISettingsService, SettingsService>();
 
             return services;
         }

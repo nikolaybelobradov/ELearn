@@ -62,7 +62,7 @@
             return exams;
         }
 
-        public async Task<ICollection<CourseViewModel>> GetLastCoursesAsync(ApplicationUser user, int count)
+        public async Task<ICollection<CourseViewModel>> GetLastCoursesAsync(int count)
         {
             var courses = await this.courseRepository
                 .All()

@@ -4,10 +4,12 @@
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-
+    using AutoMapper;
     using ELearn.Data.Models;
     using ELearn.Services.Data.Questions;
     using ELearn.Services.Mapping;
+    using ELearn.Web.ViewModels.Choices;
+    using ELearn.Web.ViewModels.Courses;
     using ELearn.Web.ViewModels.Questions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +42,7 @@
         }
 
         [Fact]
-        public async Task EditChoiceAsyncShouldEditCorrectly()
+        public async Task EditQuestionAsyncShouldEditCorrectly()
         {
             var newText = "New Question Text";
             var newIsActive = false;
@@ -78,22 +80,11 @@
         [Fact]
         public async Task GetQuestionByIdAsyncShouldWorkCorrectly()
         {
+            var question = await this.CreateQuestionAsync();
+
             AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
-            
-            var examId = Guid.NewGuid().ToString();
-            var createQuestionViewModel = new CreateQuestionViewModel
-            {
-                Text = "question",
-                IsActive = true,
-                ExamId = examId,
-            };
-
-            await this.Service.CreateQuestionAsync(createQuestionViewModel);
-
-            var question = await this.DbContext.Questions.FirstOrDefaultAsync();
-
             var result = await this.Service.GetQuestionByIdAsync(question.Id);
-            var ss = 0;
+            Assert.Equal(question.Id, result.Id);
             Assert.Equal(question.Text, result.Text);
             Assert.Equal(question.IsActive, result.IsActive);
             Assert.Equal(question.ExamId, result.ExamId);

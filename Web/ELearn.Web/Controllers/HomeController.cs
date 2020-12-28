@@ -37,7 +37,7 @@
 
                 var exams = await this.dashboardService.GetLastExamsAsync(currentUser, 10);
                 var results = await this.dashboardService.GetUserLastResultsAsync(currentUser, 10);
-                var courses = await this.dashboardService.GetLastCoursesAsync(currentUser, 10);
+                var courses = await this.dashboardService.GetLastCoursesAsync(10);
 
                 viewModel.LastExams = exams;
                 viewModel.LastResults = results;
