@@ -16,10 +16,6 @@
 
         Task<ExamViewModel> PrepareExamAsync(string examId);
 
-        List<T> RandomElements<T>(ICollection<T> elements);
-
-        int CalculateResult(ExamViewModel viewModel);
-
         Task SaveResultAsync(ExamViewModel viewModel, ApplicationUser currentUser);
 
         Task<bool> CheckForResultAsync(string examId, string userId);

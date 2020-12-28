@@ -51,25 +51,6 @@
             return exam;
         }
 
-        public List<T> RandomElements<T>(ICollection<T> elements)
-        {
-            var list = elements.ToList();
-            Random random = new Random();
-
-            for (int i = 0; i < elements.Count; i++)
-            {
-                int swapIndex = random.Next(i, elements.Count);
-                if (swapIndex != i)
-                {
-                    var temp = list[i];
-                    list[i] = list[swapIndex];
-                    list[swapIndex] = temp;
-                }
-            }
-
-            return list;
-        }
-
         public async Task<ExamViewModel> PrepareExamAsync(string examId)
         {
             var exam = await this.GetExamByIdAsync(examId);
@@ -108,34 +89,6 @@
             }
 
             return exam;
-        }
-
-        public int CalculateResult(ExamViewModel viewModel)
-        {
-            var trueQuestionsCount = 0;
-
-            foreach (var question in viewModel.Questions)
-            {
-                var trueChoicesCount = question.Choices.Where(x => x.IsTrue == true).Count();
-                var counter = 0;
-
-                foreach (var choice in question.Choices)
-                {
-                    if (choice.IsSelected && choice.IsTrue)
-                    {
-                        counter++;
-                    }
-                }
-
-                if (trueChoicesCount == counter)
-                {
-                    trueQuestionsCount++;
-                }
-            }
-
-            var result = (trueQuestionsCount * 100) / viewModel.Questions.Count;
-
-            return result;
         }
 
         public async Task SaveResultAsync(ExamViewModel viewModel, ApplicationUser currentUser)
@@ -217,6 +170,53 @@
                 .ToListAsync();
 
             return exams;
+        }
+
+        private List<T> RandomElements<T>(ICollection<T> elements)
+        {
+            var list = elements.ToList();
+            Random random = new Random();
+
+            for (int i = 0; i < elements.Count; i++)
+            {
+                int swapIndex = random.Next(i, elements.Count);
+                if (swapIndex != i)
+                {
+                    var temp = list[i];
+                    list[i] = list[swapIndex];
+                    list[swapIndex] = temp;
+                }
+            }
+
+            return list;
+        }
+
+        private int CalculateResult(ExamViewModel viewModel)
+        {
+            var trueQuestionsCount = 0;
+
+            foreach (var question in viewModel.Questions)
+            {
+                var trueChoicesCount = question.Choices.Where(x => x.IsTrue == true).Count();
+                var counter = 0;
+
+                foreach (var choice in question.Choices)
+                {
+                    if (choice.IsSelected && choice.IsTrue)
+                    {
+                        counter++;
+                    }
+                }
+
+                if (trueChoicesCount == counter)
+                {
+                    trueQuestionsCount++;
+                }
+            }
+
+            var result = (trueQuestionsCount * 100) / viewModel.Questions.Count;
+
+            return result;
         }
     }
 }

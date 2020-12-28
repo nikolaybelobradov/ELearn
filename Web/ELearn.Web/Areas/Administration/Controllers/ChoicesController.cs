@@ -1,15 +1,14 @@
-﻿
-namespace ELearn.Web.Areas.Administration.Controllers
+﻿namespace ELearn.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using ELearn.Data.Models;
     using ELearn.Services.Data.Choices;
-    using ELearn.Services.Data.Courses;
     using ELearn.Services.Data.Exams;
     using ELearn.Services.Data.Questions;
     using ELearn.Web.ViewModels.Choices;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
 
     public class ChoicesController : AdministrationController
     {

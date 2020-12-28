@@ -29,6 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\ELearn.Data\ELearn.Data.csproj" />
     <ProjectReference Include="..\..\Services\ELearn.Services.Data\ELearn.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\ELearn.Services.Messaging\ELearn.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Web\ELearn.Web\ELearn.Web.csproj" />
   </ItemGroup>
 
 </Project>
