@@ -123,68 +123,6 @@ namespace ELearn.Services.Data.Tests
         }
 
         [Fact]
-        public async Task CheckIfSaveResultAsyncWorkCorrectly()
-        {
-            var examId = Guid.NewGuid().ToString();
-
-            var user = new ApplicationUser
-            {
-                Id = Guid.NewGuid().ToString(),
-            };
-
-            var choices = new List<ChoiceViewModel>
-            {
-                new ChoiceViewModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Text = "choice1",
-                    IsTrue = true,
-                    IsSelected = true,
-                },
-                new ChoiceViewModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Text = "choice2",
-                    IsTrue = false,
-                    IsSelected = false,
-                }
-            };
-
-            var questions = new List<QuestionViewModel>
-            {
-                new QuestionViewModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Text = "question",
-                    IsActive = true,
-                    ExamId = examId,
-                    Choices = choices,
-                }
-            };
-
-            var examViewModel = new ExamViewModel
-            {
-                Id = examId,
-                Questions = questions,
-            };
-
-            await this.Service.SaveResultAsync(examViewModel, user);
-
-            var result = await this.DbContext.Results.FirstOrDefaultAsync();
-            var resultsCount = this.DbContext.Results.ToArray().Count();
-
-            Assert.Equal(1, resultsCount);
-            Assert.Equal(user.Id, result.UserId);
-            Assert.Equal(examId, result.ExamId);
-            Assert.Equal(100, result.Points);
-
-            ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(() => this.Service.SaveResultAsync(examViewModel, user));
-
-            Assert.Equal("You can take an exam only one time!", exception.Message);
-            Assert.Equal(1, resultsCount);
-        }
-
-        [Fact]
         public async Task CheckIfCheckForPermissionsWorkCorrectly()
         {
             var user = new ApplicationUser
