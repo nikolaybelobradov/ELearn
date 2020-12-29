@@ -2,6 +2,8 @@
 
 @model QuestionDetailsViewModel
 
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = Model.QuestionViewModel.Text;
     var i = 1;
@@ -26,7 +28,7 @@
                     <h2>
                         @ViewData["Title"]
                         @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
-                        this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                       this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <a class="btn btn-warning btn-sm"
                                asp-area="Administration"
@@ -46,13 +48,13 @@
                         <a class="nav-link active" data-toggle="tab" href="#choices"><i class="fas fa-file"></i> Choices</a>
                     </li>
                     @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
-                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                     this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#addChoice"><i class="fas fa-plus"></i> Add Choice</a>
                         </li>
                     }
-                    </ul>
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="choices">
                         <div class="input-group form-group flex-grow-1">
@@ -68,7 +70,7 @@
                                     <th scope="col">Text</th>
                                     <th scope="col">Correct</th>
                                     @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
-                                       this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                                     {
                                         <th scope="col">Options</th>
                                     }
@@ -89,7 +91,7 @@
                                             <td><span class="badge badge-pill badge-danger">No</span></td>
                                         }
                                         @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
-                                         this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                        this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                                         {
                                             <td>
                                                 <a class="btn btn-warning"
@@ -108,7 +110,7 @@
                         </table>
                     </div>
                     @if (ViewData["CurrentUserId"].ToString() == Model.QuestionViewModel.Exam.CreatorId ||
-                      this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                     this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
                         <div class="tab-pane fade" id="addChoice">
                             <form method="post">
