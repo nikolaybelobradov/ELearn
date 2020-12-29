@@ -21,6 +21,7 @@
         private readonly IDeletableEntityRepository<Exam> examRepository;
         private readonly IDeletableEntityRepository<Question> questionRepository;
         private readonly IDeletableEntityRepository<Result> resultRepository;
+        private readonly IDeletableEntityRepository<Choice> choiceRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
@@ -28,12 +29,14 @@
                 IDeletableEntityRepository<Exam> examRepository,
                 IDeletableEntityRepository<Question> questionRepository,
                 IDeletableEntityRepository<Result> resultRepository,
+                IDeletableEntityRepository<Choice> choiceRepository,
                 UserManager<ApplicationUser> userManager,
                 IMapper mapper)
         {
             this.examRepository = examRepository;
             this.questionRepository = questionRepository;
             this.resultRepository = resultRepository;
+            this.choiceRepository = choiceRepository;
             this.userManager = userManager;
             this.mapper = mapper;
         }
@@ -101,7 +104,7 @@
 
             if (!checkForResult)
             {
-                int points = this.CalculateResult(viewModel);
+                int points = await this.CalculateResult(viewModel);
 
                 var result = new Result()
                 {
@@ -200,30 +203,36 @@
             return list;
         }
 
-        private int CalculateResult(ExamViewModel viewModel)
+        private async Task<int> CalculateResult(ExamViewModel viewModel)
         {
             var trueQuestionsCount = 0;
 
             foreach (var question in viewModel.Questions)
             {
-                var trueChoicesCount = question.Choices.Where(x => x.IsTrue == true).Count();
+                var trueChoicesList = await this.choiceRepository.All().Where(c => c.QuestionId == question.Id && c.IsTrue == true).ToListAsync();
+                var trueChoicesCount = trueChoicesList.Count();
                 var counter = 0;
+
+                var selectedChoicesCount = question.Choices.Where(c => c.IsSelected == true).Count();
 
                 foreach (var choice in question.Choices)
                 {
-                    if (choice.IsSelected && choice.IsTrue)
+                    if (choice.IsSelected == true)
                     {
-                        counter++;
+                        if (choice.IsTrue == true)
+                        {
+                            counter++;
+                        }
                     }
                 }
-
-                if (trueChoicesCount == counter)
+                if (selectedChoicesCount == trueChoicesCount && counter == trueChoicesCount)
                 {
                     trueQuestionsCount++;
                 }
             }
-
-            var result = (trueQuestionsCount * 100) / viewModel.Questions.Count;
+                
+                var result = (trueQuestionsCount * 100) / viewModel.Questions.Count;
+            var asd = 0;
 
             return result;
         }

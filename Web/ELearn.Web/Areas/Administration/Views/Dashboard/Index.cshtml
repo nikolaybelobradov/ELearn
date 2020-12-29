@@ -43,7 +43,7 @@
                     <tbody>
                         @foreach (var exam in Model.LastExams)
                         {
-                            <tr onclick="location.href = '@(Url.Action("Details", "Exams", new { id = exam.Id }))'" style="cursor: pointer;">
+                            <tr style="cursor: pointer;">
                                 <td>@j</td>
                                 <td>@exam.Name</td>
                                 <td>@exam.Creator.FirstName @exam.Creator.LastName</td>

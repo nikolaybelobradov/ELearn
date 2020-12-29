@@ -33,25 +33,18 @@
         [HttpGet]
         public async Task<IActionResult> Take(string id)
         {
-            var viewModel = await this.examsService.PrepareExamAsync(id);
+           var user = await this.userManager.GetUserAsync(this.HttpContext.User);
+           var checkForResult = await this.examsService.CheckForResultAsync(id, user.Id);
+           if (!checkForResult)
+            {
+                var viewModel = await this.examsService.PrepareExamAsync(id);
 
-            return this.View(viewModel);
-
-            // TODO
-
-            //var user = await this.userManager.GetUserAsync(this.HttpContext.User);
-            //var checkForResult = await this.examsService.CheckForResultAsync(id, user.Id);
-
-            //if (!checkForResult)
-            //{
-            //    var viewModel = await this.examsService.PrepareExamAsync(id);
-
-            //    return this.View(viewModel);
-            //}
-            //else
-            //{
-            //    throw new ArgumentException("You have already taken this exam! You have only one attempt to take the exam.");
-            //}
+                return this.View(viewModel);
+            }
+            else
+            {
+                throw new ArgumentException("You have already taken this exam! You have only one attempt to take the exam.");
+            }
         }
 
         [HttpPost]

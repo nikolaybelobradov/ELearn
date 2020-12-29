@@ -83,7 +83,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var question in Model.Questions)
+                                @foreach (var question in Model.Questions.OrderBy(x => x.CreatedOn))
                                 {
                                     <tr class="searchItem">
                                         <td>@i</td>

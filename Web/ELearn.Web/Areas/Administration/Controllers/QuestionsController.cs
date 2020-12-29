@@ -109,10 +109,11 @@
         {
             var question = await this.questionsService.GetQuestionByIdAsync(id);
             var exam = await this.examsService.GetExamByIdAsync(question.ExamId);
-            var currentUser = await this.userManager.GetUserAsync(this.HttpContext.User);
 
-            this.ViewData["CurrentUserId"] = currentUser.Id;
+
             this.ViewData["CourseName"] = exam.Course.Name;
+            this.ViewData["ExamName"] = exam.Name;
+
 
             var viewModel = new QuestionDetailsViewModel()
             {

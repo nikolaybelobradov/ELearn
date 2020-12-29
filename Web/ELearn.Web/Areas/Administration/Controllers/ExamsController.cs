@@ -5,6 +5,7 @@
     using ELearn.Data.Models;
     using ELearn.Services.Data.Courses;
     using ELearn.Services.Data.Exams;
+    using ELearn.Services.Data.Results;
     using ELearn.Web.ViewModels.Courses;
     using ELearn.Web.ViewModels.Exams;
     using Microsoft.AspNetCore.Identity;
@@ -14,11 +15,13 @@
     {
         private readonly IExamsService examsService;
         private readonly ICoursesService coursesService;
+        private readonly IResultsService resultsService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ExamsController(IExamsService examsService, ICoursesService coursesService, UserManager<ApplicationUser> userManager)
+        public ExamsController(IExamsService examsService, IResultsService resultsService, ICoursesService coursesService, UserManager<ApplicationUser> userManager)
         {
             this.examsService = examsService;
+            this.resultsService = resultsService;
             this.coursesService = coursesService;
             this.userManager = userManager;
         }
