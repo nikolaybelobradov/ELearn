@@ -9,7 +9,7 @@ This project is the defense project for ASP.NET Core course at Software Universi
 3. [Credits](https://github.com/nikolaybelobradov/ELearn#credits)
 
 ## Screenshots:
-### Home (Student):
+### Home:
 ![Home](https://user-images.githubusercontent.com/24815199/133515978-bcf87058-b549-4c1e-b4d0-96b67cf7a61b.png)
 ### Create Exam:
 ![Create Exam](https://user-images.githubusercontent.com/24815199/133516003-720faf49-82f6-49a2-8031-eae62a2338cd.png)
